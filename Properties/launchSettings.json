@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "ForgeBot": {
+      "commandName": "Project",
+      "commandLineArgs": "-v -none"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    }
+  }
+}

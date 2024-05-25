@@ -1,0 +1,3090 @@
+<?xml version="1.0"?>
+<ArrayOfScript xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Script>
+    <Name>
+      Blueprint
+    </Name>
+    <Description>
+      Blueprint: Customize an items crafting blueprint.
+
+      Blueprint [item:qty] [craft|furnace:time] [slot:item:qty:dur]..[slot:item:qty:dur] [skill=x] [level=x]
+
+      `[item:qty]` - The product item and qty of the craft. Qty is optional. If omitted, a qty of 1 is used.
+
+      `[slot:item:qty:dur]` - The craft grid slot, item id, qty and durability of a material used in the craft. Slot must be a number from 1 to 9. 1=bottom left, 2=bottom center, 3=bottom right, 4=middle left,6=middle right,7=top left, 9=top right. Slot can only be 1-3 for furnace items. Slot is optional. If Slot is omitted it will default to the previous slot + 1, starting with 1. Qty is optional, if omitted a qty of 1 is used. Durability is optional, if omitted, 0 is used.
+
+      `[craft|furnace:time]` - Whether the item is crafted in the workbench or furnace. Time = smelt time in furnace. This parameter is optional and can be omitted. Time is also optional and can be omitted. If time is omitted, the items current smelt time is used. If the item currently does not have a smelt time, then a smelt time of 4.5 seconds is used.
+
+      `[skill=x]` - The skill type used for crafting. This parameter is optional and can be omitted.
+      `[level=x]` - The required skill level to craft the item. This parameter is optional and can be omitted.
+
+      Blueprint customizations via this command are not saved. Blueprints will be reset to default on a world reload.
+
+      Note: Only items currently craftable can be customized. i.e. You cannot add a blueprint for an item which does not already have a blueprint.
+      Note: In Non Creative worlds, only potion and gun blueprints can be customized.
+
+      Examples:
+
+      Blueprint [Revolver]
+      Disables the crafting of a Revolver.
+
+      Blueprint [Revolver] [SteelIngot] [Stick]
+      Allows workbench crafting of a Revolver by placing a steel ingot bottom left, and a stick bottom center. Crafting skill level 1 is required.
+
+      Blueprint [Revolver] [SteelIngot] [Stick] [skill=smithing] [level=15]
+      Allows workbench crafting of a Revolver by placing a steel ingot bottom left, and a stick bottom center. A Smithing level of 15 is required to craft the item.
+
+      Blueprint [Blue:2] [4:Wood:3] [BlueBox:5] [9:Feather]
+      Allows workbench crafting of 2 Blue blocks by placing 3 Wood blocks middle left, 5 BlueBox blocks middle center, and a Feather top right.
+
+      Blueprint [ColorGreen] [furnace] [Basalt] [Leaves]
+      Allows furnace smelting of 1 Green block from Basalt and Leaves. Smelt time defaults to 4.5 seconds.
+
+      var [time] = [2.5]
+      Blueprint [ColorGreen] [furnace:time] [Basalt] [Leaves]
+      Allows furnace smelting of 1 Green block from Basalt and Leaves. Smelt time is 2.5 seconds.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      CaveIn
+    </Name>
+    <Description>
+      CaveIn: Starts a cave in (earthquake). Only one Cave In can exist in a world at the same time. If a CaveIn command is executed and there is already another cave in in progress, the command is ignored.
+
+      CaveIn [x,y,z] [seed]
+
+      `[x,y,z]` - The coordinate in the world of the center of the cave in.
+
+      `[seed]` - The seed for the random number generator. This value can be any number. This parameter may be omitted, and a value of zero (0) will be used.
+
+      Examples:
+
+      CaveIn [200,100,300]
+      Starts a cave in at location 200,100,300, using zero (0) as the random seed.
+
+      CaveIn [300,120,200] [2001]
+      Starts a Cave In at location 300,120,200, using 2001 as the random seed.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      CCTV
+    </Name>
+    <Description>
+      CCTV: Views the game world from a block position.
+
+      CCTV [admin] [x,y,z]
+      CCTV [admin] [x,y,z] [x,y,z|n|s|e|w|track]
+      CCTV [admin] [x,y,z] [x,y,z|n|s|e|w|track]
+      CCTV [admin] [x,y,z] [x,y,z|n|s|e|w|track] [millisecs]
+      CCTV [admin] [x,y,z] [x,y,z|n|s|e|w|track] [millisecs] [swivelspeed]
+      CCTV [admin] [x,y,z] [x,y,z|n|s|e|w|track] [millisecs] [swivelspeed] [fov]
+
+      `[admin]` - Indicates this command should only be executed if the player has the admin permission. False if omitted.
+
+      `[x,y,z]` - The coordinate in the world of the block to view from.
+
+      `[x,y,z|n|s|e|w|track]` - Either the target block position to look at or the initial direction the player will be facing. n = north, s = south, e = east, w = west. Hybrid directions such as nw or sse are not valid. North is used if this parameter is omitted. There is also the option to specify [track] instead of a direction. If this option is used, the CCTV will track the player who activated the script. swivelspeed is ignored if tracking is used.
+
+      `[millisecs]` - The length of time the player will view from the CCTV. The player may exit manually before this time has passed by pressing the A button. If this parameter is omitted or has a value of zero, the player will view indefinitely, until they exit manually. This parameter cannot be omitted if you want to specify [swivelspeed].
+
+      `[swivelspeed]` - How fast the camera swivels when using the right stick. This value is a percentage (valid values between 0 and 100). 1% = slowest, 100% = fastest, 0% = swivel disabled. If this parameter is omitted, 0 is used (swivel is disabled). swivelspeed is ignore if the [track] option is used instead of a direction. This parameter cannot be omitted if you want to specify [fov].
+
+      `[fov]` - Field of View (zoom). This value is a percentage (valid values between 1 and 100). 1% = fully zoomed in, 100% = fully zoomed out. A value of 50% is used if this parameter is omitted.
+
+      Examples:
+
+      CCTV [10,20,30]
+      Player views the world from location 10,20,30, initially facing north. The player will stay in CCTV mode indefinitely, until they press the A button. Swivel is disabled. FOV is 50%.
+
+      CCTV [admin] [10,20,30]
+      Same as above except the command only works for admin players.
+
+      CCTV [admin] [10,20,30] [track]
+      Same as above except the CCTV will stay focused on the player (as they move around) who activated the script.
+
+      CCTV [10,20,30] [e]
+      Player views the world from location 10,20,30, initially facing east. The player will stay in CCTV mode indefinitely, until they press the A button. Swivel is disabled. FOV is 50%.
+
+      CCTV [10,20,30] [e] [5000]
+      Same as above except the player will automatically exit from the CCTV view after 5 seconds, if they have not already manually exited.  Swivel is disabled. FOV is 50%.
+
+      CCTV [10,20,30] [e] [5000] [10]
+      Same as above except the Swivel speed will be 10% (quite slow).
+
+      CCTV [10,20,30] [20,20,30] [5000] [10]
+      Same as above except the CCTV will look at the block position [20,20,30] instead of facing east.
+
+      CCTV [10,20,30] [e] [5000] [10] [15]
+      Same as above except the fov will be 15% (quite zoomed in).
+
+      CCTV [admin] [10,20,30] [n] [0] [100] [90]
+      Admin Player views the world from location 10,20,30, initially facing west. The player will stay in CCTV mode indefinitely, until they press the A button. Swivel is full speed. FOV is 90%.
+
+
+      While CCTV is active for a player, their HUD is turned off (like ghosting players). If swivel is not disabled, the player can zoom out/in using the left/right shoulder buttons.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Clan
+    </Name>
+    <Description>
+      Clan: Assigns the player to a clan or removes them from a clan.
+
+      Clan [name|remove]
+
+      `[name]` - The name of the clan to assign the player to.
+      `[remove]` - Remove the player from whichever clan they are assigned to.
+
+      Examples:
+
+      Clan [Team1]
+      Assigns the player to the clan called Team1.
+
+      Clan [remove]
+      Removes the player from whichever clan they have previously been assigned to.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Commit
+    </Name>
+    <Description>
+      Commit: Forces a graphics refresh.
+
+      Commit
+
+      There are no parameters for this command.
+
+      The Commit command is needed if you intend to create some kind of animation. If a script contains several commands that change blocks in the world, the graphics are only refreshed once the script has finished, this is because graphics refreshes are slow and if the game refreshed the graphics after every block is changed, the script could take a very long time to complete. It is also sometimes undesirable to have the graphics refresh after every block change, as you may wish for a wall of blocks etc to appear or disappear in a single moment.
+
+      One example where animation is required is for a script that raises or lowers a castle gate. For each level the gate raises/lowers, you want the graphics to refresh to create the animation of the gate raising/lowering. In this case you would insert a Commit command (and often a short Wait command) between each set of commands that raise/lower one level of the gate.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Context
+    </Name>
+    <Description>
+      Context: Set the context for some command parameters.
+
+      Currently only the [player] context type can be set. This command allows scripts to change the target of all [player] based commands. i.e. the value of [player] can be changed for commands that use the [player] parameter.
+
+      Context [player]` - Same as Context [player] [default].
+      Context [player] [default]` - Set the [player] context to default - which is the player who activated the script.
+      Context [player] [target]` - Set the [player] context to the result of an Intersect command.
+      Context [player] [killer]` - Set the [player] context to the player who killed the [default] player. Only usable on PlayerDeath event scripts.
+
+      Context is automatically set back to default at the end of an if/endif block, so there is no need to manually set it back.
+
+      Examples:
+
+      if  Intersect [ray] [vrel:0,0,0] [vrel:8,0,0]
+      then  Health [+10] // this increases the health of the default context - the player who activated the script.  Context [player] [target] // set context to the player or NPC returned by the intersect command.  Health [-20] // this damages the player or NPC returned by the intersect command.
+      endif // Context is automatically set back to [default] here.
+
+      if  Intersect [sphere] [prel:0,1,0] [15] [players]
+      then  History [kills] [player] // increment the [kills] history for the default context - the player who activated the script.  Context [player] [target] // set context to the player returned by the intersect command.  History [killed] [player] // increment the [killed] history for the player returned by the intersect command.
+      endif // Context is automatically set back to [default] here.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      CopyBlock
+    </Name>
+    <Description>
+      CopyBlock: Copies a block from a source location to a destination location. All data and settings attached to the source block are copied to the destination block.
+
+      CopyBlock [x,y,z] [x,y,z]
+
+      `[x,y,z]` - The 1st coordinate is the source location.
+      `[x,y,z]` - The 2nd coordinate is the destination location.
+
+      Examples:
+
+      CopyBlock [10,20,30] [110,120,130]
+      Copies the block and all it's associated data at location 10,20.30 to location 110,120,130.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      CopyRegion
+    </Name>
+    <Description>
+      CopyRegion: Copies all the blocks from one source region to another destination region. All data and settings attached to the source blocks are copied to the destination blocks.
+
+      CopyRegion [x,y,z] [x,y,z] [x,y,z]
+
+      `[x,y,z]` - The 1st coordinate is the minimum bound of the source region.
+      `[x,y,z]` - The 2nd coordinate is the maximum bound of the source region.
+      `[x,y,z]` - The 3rd coordinate is the minimum bound of the destination region.
+
+      Examples:
+
+      CopyRegion [100,200,300] [150,250,350] [10,20,30]
+      Copies all the blocks and all their associated data from 100,200,300 / 150,250,350 to the location starting at 10,20,30. The final block at 150,250,350 will be copied to 60,70,80.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Equip
+    </Name>
+    <Description>
+      Equip: Forces the player to equip an item if they have it in their inventory.
+
+      Equip [left|right|body] [item]
+
+      `[left|right|body]` - left hand, right hand, or body slot. Omit to use default. If body is used, the item will be equipped to the appropriate body slot.
+
+      `[item]` - The item to equip.
+
+      Note: Hosts ought to use this command moderately and only for controlled scenario's. Players won't like their equips being changed outside their control and may leave your world as a consequence.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Unequip
+    </Name>
+    <Description>
+      Unequip: Forces the player to unequip items.
+
+      Unequip [left|right|body] [item]
+
+      `[left|right|body]` - left hand, right hand, or body slot. Omit to unequip the item from any slot.
+
+      `[item]` - The item to unequip. Omit to unequip the item regardless of what it is.
+
+      Note: Hosts ought to use this command moderately and only for controlled scenario's. Players won't like their equips being changed outside their control and may leave your world as a consequence.
+
+      Examples:
+
+      Unequip
+      Unequips all items from all equip slots.
+
+      Unequip [RingOfIce]
+      Unequips the ring of ice from all slots (left hand, right hand and appropriate body slot).
+
+      Unequip [body] [RingOfIce]
+      Unequips the ring of ice from the appropriate body slot.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Exit
+    </Name>
+    <Description>
+      Exit: Exit the script immediately (stop executing the script at this command, even if there are more commands that follow).
+
+      Example:
+      if  condition1
+      then  do something
+      else  exit
+      endif
+
+      if  condition2
+      then  do something
+      endif
+
+      If condition1 is false then the script stops executing and the second if block (condition2) is not executed. The Exit command is not needed at the end of a script (the last command), it's only needed if your intent is to conditionally exit the script before the last command.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Explosion
+    </Name>
+    <Description>
+      Explosion: Creates an explosion.
+
+      Explosion [x,y,z]
+      Explosion [x,y,z] [radius]
+      Explosion [x,y,z] [radius] [strength]
+
+      `[x,y,z]` - The coordinate for the center of the explosion.
+
+      `[radius]` - The radius of the explosion. Values must be between 1 and 25. If this parameter is omitted, a default value of 5 is used.
+
+      `[strength]` - The (blast) strength of the explosion. Values must be between 1 and 300. If this parameter is omitted, a default value of radius x 3 is used.
+
+      Examples:
+
+      Explosion [100,150, 200]
+      Creates an explosion at coordinate 100,150,200, using the default radius of 5 and default strength of 15 (radius x 3).
+
+      Explosion [100,150, 200] [10]
+      Creates an explosion at coordinate 100,150,200, using a radius of 10 and default strength of 30 (radius x 3).
+
+      Explosion [100,150, 200] [15] [50]
+      Creates an explosion at coordinate 100,150,200, using a radius of 15 and strength of 50.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Fog
+    </Name>
+    <Description>
+      Fog: Creates a fog weather effect.
+
+      Fog [x,z] [radius] [duration] [intensity]
+      Fog [x,z] [radius] [duration] [intensity] [r,g,b]
+      Fog [x,z] [radius] [duration] [intensity] [r,g,b] [visibility]
+      Fog [x,z] [delete]
+
+      `[x,z]` - The surface coordinate for the center of the fog effect.
+
+      `[radius]` - The radius of the fog effect in blocks.
+
+      `[duration]` - The duration of the fog effect in seconds.
+
+      `[intensity]` - The strength or thickness of the fog. Valid values are 1 - 100, with 1 being the weakest and 100 the strongest.
+
+      `[r,g,b]` - The color of the fog in rgb format. r = red, g = green, b = blue. rgb are the 3 primary light colors and any color can be created with these 3 components. Possible values for each component are 0 - 255. This parameter may be omitted. If it is omitted, a random grayish color is used.
+
+      `[visibility]` - The distance in blocks from the players eye to the full strength of the fog. This parameter may be omitted. If it is omitted, a value of 40 is used.
+
+      `[delete]` - Deletes the Fog effect at [x,z]
+
+      Examples:
+
+      Fog [100,200] [100] [20] [50]
+      Creates a fog effect at surface coordinate 100,200, with a radius of 100 blocks. The effect lasts for 20 seconds and is half strength. A random grayish color is used. Visibility is 40 blocks.
+
+      Fog [300,800] [70] [120] [75] [200,200,200]
+      Creates a fog effect at surface coordinate 300,800, with a radius of 70 blocks. The effect lasts for 2 minutes and is 3/4 strength. The color of the fog is a whitish gray. Visibility is 40 blocks.
+
+      Fog [800,100] [20] [300] [100] [20,20,20] [3]
+      Creates a fog effect at surface coordinate 800,100, with a radius of 20 blocks. The effect lasts for 5 minutes and is full strength. The color of the fog is dark almost black. Visibility is 3 blocks, making it impossible for the player to see more than 3 blocks ahead of them.
+
+      Fog [300,800] [delete]
+      Deletes the current Fog effect at [300,800]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Hail
+    </Name>
+    <Description>
+      Hail: Creates a hail weather effect.
+
+      Hail [x,z] [radius] [duration] [intensity]
+      Hail [x,z] [radius] [duration] [intensity] [r,g,b]
+      Hail [x,z] [radius] [duration] [intensity] [r,g,b] [minsize,maxsize]
+      Hail [x,z] [delete]
+
+      `[x,z]` - The surface coordinate for the center of the hail storm.
+
+      `[radius]` - The radius of the hail storm in blocks.
+
+      `[duration]` - The duration of the hail storm in seconds.
+
+      `[intensity]` - The strength the hail storm. Valid values are 1 - 100, with 1 being the weakest and 100 the strongest.
+
+      `[r,g,b]` - The color of the hail stones in rgb format. r = red, g = green, b = blue. rgb are the 3 primary light colors and any color can be created with these 3 components. Possible values for each component are 0 - 255. This parameter may be omitted. If it is omitted, a random translucent whitish gray color is used.
+
+      `[minsize,maxsize]` - The size of the hail stones in centimeters. Valid values are 1 - 100, with 1 being 1cm and 100 being 1m (1 block). For each hail stone that falls, the game picks a random size between minsize and maxsize.
+
+      `[delete]` - Deletes the current Hail effect at [x,z]
+
+      Examples:
+
+      Hail [100,200] [100] [20] [50]
+      Creates a hail storm at surface coordinate 100,200, with a radius of 100 blocks. The storm lasts for 20 seconds and is half strength. A random whitish gray color is used.
+
+      Hail [300,800] [70] [120] [75] [200,200,200]
+      Creates a hail storm at surface coordinate 300,800, with a radius of 70 blocks. The effect lasts for 2 minutes and is 3/4 strength. The color of the hail stones is a light whitish gray.
+
+      Hail [800,100] [20] [300] [100] [20,20,20] [10,25]
+      Creates a hail storm at surface coordinate 800,100, with a radius of 20 blocks. The effect lasts for 5 minutes and is full strength. The color of the fog is dark almost black. The hail stones will range in size from 10 - 25 centimeters.
+
+      Hail [300,800] [delete]
+      Deletes the current Hail effect at [300,800]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Health
+    </Name>
+    <Description>
+      Health: Manipulate a players (or target NPC) current Health points.
+
+      Health [qty] [milliseconds] [duration|history] [delete] [name=]
+
+      `[qty]` - The number of points to add/subtract from the players current health. A negative number will lower the players health (cause damage).
+
+      `[milliseconds]` - Apply this effect every # of milliseconds. If this parameter is omitted, the effect is a one off. Minimum value is 16.
+
+      `[duration|history]` - Apply this effect for [duration] milliseconds then automatically stop. Only valid if [milliseconds] is also specified. If a [milliseconds] parameter is included, but this parameter is omitted, then the effect runs indefinitely.
+
+      An alternative to duration is a history key. The effect will be applied while the player has that history, and the player must have the history at the time of this command for the effect to be added to the players effect stack, so if the player only gets the history after this command is executed, the effect will not apply.
+
+      `[delete]` - Delete the effect immediately. Only named effects can be deleted.
+
+      `[name=]` - The name of the effect. If you require to delete a specific effect, it must be named.
+
+      Health commands can be stacked and are accumulative.
+
+      e.g. if you run these commands:
+
+      Health [20] [1000]
+      Health [-15] [1000]
+      The accumulative effect is +5 health points per second.
+
+      *Note: If the script [player] context is currently [target] and the target is a NPC, this command will work on the target NPC.
+
+      Examples:
+
+      Health [10]
+      Add 10 health points to the player. This is a one off.
+
+      Health [-20]
+      Subtract 20 health points from the player. This is a one off. If the players health reaches zero, they will die.
+
+      Health [-20] [1000]
+      Subtract 20 health points from the player every second, for an indefinate period of time.
+
+      Health [-2] [500] [10000]
+      Subtract 2 health points from the player every half second. Apply this effect for 10 seconds then stop.
+
+      Health [-2] [500] [challenge]
+      Subtract 2 health points from the player every half second. Apply this effect for as long as the player has the 'challenge' history. If the player does not have the challenge history at the time this command is executed, the effect will not be added.
+
+      Health [5] [2000] [name=booster]
+      Add 5 health points to the player every 2 seconds. Name the effect 'booster'.
+
+      Health [delete] [booster]
+      Delete an existing health effect which was named [booster].
+
+      Health [delete]
+      Delete all existing health effects on the player.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      History
+    </Name>
+    <Description>
+      History: Manipulates historical records. Historical records can be queried by the HasHistory command to determine if a record exists.
+
+      History [name] [+/-count|delete]
+      History [name] [player|clan] [+/-count|delete]
+
+      `[name]` - The name or label of the record. History names support folders which allows you to match your history names with script names, where appropriate.
+
+      `[count]` - Specify either an absolute value to set the history to that value, or specify a relative value to add/subtract that value from the history.
+      `[delete]` - Deletes the history record.
+      `[player]` - Indicates the record is for the player.
+      `[clan]` - Indicates the record is for the players clan.
+
+      Records are actually counters. So if the History command adds a record for the same name more than once, then a new record is not created, but the counter for the initial record increased. This allows scripts to query how many times a record has occured.
+
+      Examples:
+
+      History [ActionX]` - Creates a new system history record called ActionX with a value of 1, or if the history already exists, it increments it by 1.
+      History [ActionX] [+1]` - Identical to above.
+      History [ActionX] [3]` - Creates a new system history record called ActionX with a value of 3, or if the history already exists, it sets it's value to 3, regardless of what it was before.
+      History [ActionX] [delete]` - Deletes the system history record called ActionX.
+      History [ActionX] [-5]` - Subtracts 5 from the system history record.
+
+      History [ActionX] [player]` - Creates a new player history record called ActionX with a value of 1, or if the history already exists, it increments it by 1.
+      History [ActionX] [player] [+1]` - Identical to above.
+      History [ActionX] [player] [3]` - Creates a new player history record called ActionX with a value of 3, or if the history already exists, it sets it's value to 3, regardless of what it was before.
+      History [ActionX] [player] [delete]` - Deletes the player history record called ActionX.
+      History [ActionX] [player] [-5]` - Subtracts 5 from the player history record.
+      *Note: The player is whichever player activated the script.
+
+      History [ActionX] [clan]` - Creates a new clan history record called ActionX with a value of 1, or if the history already exists, it increments it by 1.
+      History [ActionX] [clan] [+1]` - Identical to above.
+      History [ActionX] [clan] [3]` - Creates a new clan history record called ActionX with a value of 3, or if the history already exists, it sets it's value to 3, regardless of what it was before.
+      History [ActionX] [clan] [delete]` - Deletes the clan history record called ActionX.
+      History [ActionX] [clan] [-5]` - Subtracts 5 from the clan history record.
+      *Note: The Clan is the clan of whichever player activated the script. If the player is not in a clan, the command does nothing.
+
+      var [foo] = [health] / [maxhealth] * [100]
+      History [HealthAsPercentage] [player] [foo]
+      Creates a variable that holds the value of the players current health as a percentage of it's max health, and assigns that variable to the players history 'HealthAsPercentage'.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HUDBar
+    </Name>
+    <Description>
+      HUDBar: Add/remove custom HUD status bars, driven by history values.
+
+      HUDBar [name] [player] [history] [maxvalue] [x,y,w,h] [r,g,b,a] [label|vertical|numbers|right|abs]
+      HUDBar [name] [player] [delete]
+
+      `[name]` - The name of the bar. This is also the label drawn on screen.
+      `[player]` - Indicates the bar is only for the player. Omit to have the bar created for all players.
+      `[history]` - Specifies which history to use as the status value.
+      `[maxvalue]` - The 'full' value. If the history value is &gt;= maxvalue, the status bar will be full. If the history value is 30% of the maxvalue, the status bar will be 30% full.
+      `[x,y,w,h]` - The position and size of the bar on the screen. x,y specifies the screen position of the bar, w,h specify the width and height of the bar in pixels.
+      `[r,g,b,a]` - The color of the status bar.
+      `[label|vertical|numbers|right|abs]` - Bar attributes. There are currently 5 attributes you can specify to change the default bar format. Multiple attributes can be specified (separated by vertical bars). If this parameter is omitted, the bars attributes use their default values (no label, horizontal, no numbers, left justified).
+
+      `[label] specifies the bar should show a text label (using the name as the label).
+      `[vertical] changes the bar into a vertical bar (the default is horizontal).
+      `[numbers] specifies that the bar should show the values inside the bar, e.g. 150 / 500.
+      `[right] specifies that the bar should use right justify (the default is left justify).
+      `[abs] specifies absolute coordinates. [x,y] will not be HUD position adjusted.
+
+      Examples:
+
+      HUDBar [Time] [syshistory:time] [100] [900,100,200,20] [255,0,0,255] [numbers]
+      This will create a horizontal status bar with the name and label of Time. The value used for the bar will come from the system 'time' history. The bar will be full if the history value is &gt;= 100. The bar will be positioned at screen location 900, 100 and will be 200 pixels wide and 20 pixels high. The color will be solid red. Numbers will be shown inside the bar.
+
+      HUDBar [Time] [delete]
+      This will delete the HUDBar created above.
+
+      HUDBar [Radiation] [player] [history:radiation] [50] [800,200,30,150] [0,255,0,255] [label|vertical|right|abs]
+      This will create a vertical status bar with the name of Radiation and it will be specific to the player who activated the script (other players will not see it). The label will be shown. The value used for the bar will come from the player 'radiation' history. The bar will be full if the history value is &gt;= 50. The bar will be positioned at screen location 800, 200 and will be 30 pixels wide and 150 pixels high. The color will be solid green. Numbers will not be shown. The bar is right justified. The bar is not adjusted by the players HUD position setting.
+
+      HUDBar [Radiation] [player] [delete]
+      This will delete the HUDBar created above.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HUDCounter
+    </Name>
+    <Description>
+      HUDCounter: Add/remove custom HUD counters, driven by history values.
+
+      HUDCounter [name] [player] [history] [x,y] [r,g,b,a] [label|abs]
+      HUDCounter [name] [player] [delete]
+
+      `[name]` - The name of the counter. This is also the label drawn on screen.
+      `[player]` - Indicates the counter is only for the player. Omit to have the counter created for all players.
+      `[history]` - Specifies which history to use as the counter value.
+      `[x,y]` - The position of the counter on the screen.
+      `[r,g,b,a]` - The color of the counter.
+      `[label]` - Specifies whether the label for the counter should be displayed. If this parameter is omitted, no label will be displayed.
+      `[abs]` - Specifies absolute coordinates. [x,y] will not be HUD position adjusted.
+
+      Examples:
+
+      HUDCounter [Time] [syshistory:time] [900,100] [255,0,0,255] [label]
+      This will create a counter with the name and label of Time. The value used for the counter will come from the system 'time' history. The counter will be positioned at screen location 900, 100. The color will be solid red. The label for the counter will be shown.
+
+      HUDCounter [Time] [delete]
+      This will delete the HUDCounter created above.
+
+      HUDCounter [Radiation] [player] [history:radiation] [800,200] [0,255,0,255]
+      This will create a counter with the name of Radiation and it will be specific to the player who activated the script (other players will not see it). The value used for the counter will come from the player 'radiation' history. The counter will be positioned at screen location 800, 200. The color will be solid green. The label will not be shown.
+
+      HUDCounter [Radiation] [player] [delete]
+      This will delete the HUDCounter created above.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HUDShape
+    </Name>
+    <Description>
+      HUDShape: Add/remove custom shapes to the HUD.
+
+      HUDShape [name:var] [player] [rect] [x,y,w,h] [r,g,b,a] [abs]
+      HUDShape [name] [player] [delete]
+
+      `[name]` - The name of the shape.
+      `[name:var]` - The name of the shape and an index (variable name). The index is [int:var].
+      `[player]` - Indicates the shape is only for the player. Omit to have the shape created for all players.
+      `[rect]` - The type of shape. Currently only [rect] is supported (rectangle).
+      `[x,y,w,h]` - The position and size of the rectangle on the screen. x,y specifies the screen position of the rectangle, w,h specify the width and height of the rectangle in pixels.
+      `[r,g,b,a]` - The color of the shape.
+      `[abs]` - Specifies absolute coordinates. [x,y] will not be HUD position adjusted.
+      `[delete]` - Deletes the named shape. If the shape name as indexes [name:var], then all indexes are deleted.
+
+      Examples:
+
+      HUDShape [BloodSplat1] [rect] [900,100,50,60] [255,0,0,255]
+      This will create a rectangle with the name of BloodSplat1. The rectangle will be positioned at screen location 900, 100, it will be 50 pixels wide and 60 pixels high. The color will be solid red.
+
+      HUDShape [BloodSplat1] [delete]
+      This will delete the HUDShape created above.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HUDText
+    </Name>
+    <Description>
+      HUDText: Add/remove custom text element to the HUD.
+
+      HUDText [name] [player] [text] [x,y] [scale] [r,g,b,a] [rot] [vertical|right|abs]
+      HUDText [name] [player] [delete]
+
+      `[name]` - The name of the text element.
+      `[player]` - Indicates the element is only for the player. Omit to have the element created for all players.
+      `[text]` - The text to display.
+      `[x,y]` - The position of the text on the screen.
+      `[scale]` - The size of the text. 1 = default, &lt; 1 = smaller, &gt; 1 = bigger. If this parameter is omitted, 1 is used.
+      `[r,g,b,a]` - The color of the text. If this parameter is omitted, white is used.
+      `[rot]` - The rotation of the text. If this parameter is omitted, 0 is used.
+      `[vertical|right]` - Text justification. Omit for left justification.
+      `[abs]` - Specifies absolute coordinates. [x,y] will not be HUD position adjusted.
+
+      Examples:
+
+      HUDText [name] [Hello] [900,100] [1] [255,0,0,255]
+      This will create a text element with the name of 'name'. The element will be positioned at screen location 900, 100, it will show the text 'Hello'. The color will be solid red.
+
+      HUDText [name] [delete]
+      This will delete the HUDText element created above.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Input
+    </Name>
+    <Description>
+      Input: Prompt the player to enter a number.
+
+      Input [var]
+
+      `[var] name of the variable to store the number entered.
+
+      Examples:
+
+      Input [count]
+      Prompts the player to enter a number. Once the number is entered, the variable named 'count' contains the number.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Inventory
+    </Name>
+    <Description>
+      Inventory: Manipulates block and entity inventories.
+      Inventory [x,y,z] [clear]
+      Inventory [x,y,z] [clear] [item]
+      Inventory [x,y,z] [add|take] [item] [qty]
+      Inventory [player] [clear]
+      Inventory [player] [clear] [item]
+      Inventory [player] [add|take] [item] [qty]
+      Inventory [x,y,z] [player] [move]
+      Inventory [x,y,z] [player] [move] [item]
+      Inventory [x,y,z] [player] [move] [item] [qty]
+      Inventory [player] [x,y,z] [move]
+      Inventory [player] [x,y,z] [move] [item]
+      Inventory [player] [x,y,z] [move] [item] [qty]
+      Inventory [x,y,z] [x,y,z] [clear]
+      Inventory [x,y,z] [x,y,z] [clear] [item]
+      Inventory [x,y,z] [x,y,z] [move] [item]
+      Inventory [x,y,z] [x,y,z] [copy] [item]
+      Inventory [x,y,z] [x,y,z] [add|take|copy|move] [item] [qty]
+      Inventory [x,y,z] [x,y,z] [x,y,z] [copy|move]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Item
+    </Name>
+    <Description>
+      Item: Customize an items properties.
+
+      `[Item] [enable|disable] [name=x] [desc=x] [durability=x] [skill=x] [level=x] [health=x] [strength=x] [attack=x] [defence=x] [ranged=x] [looting=x] [damage=x] [reach=x] [speed=x] [delay=x]
+
+      `[enable|disable]` - Enable or disable the item (same as Item options screen). This parameter is optional and can be omitted.
+      `[name=x]` - Rename the item. This parameter is optional and can be omitted.
+      `[desc=x]` - Describe the item. This parameter is optional and can be omitted.
+      `[durability=x]` - Set the items durability. This parameter is optional and can be omitted.
+      `[skill=x]` - Set the skill type for using the item.
+      `[level=x]` - Set the required skill level to use the item.
+      `[health=x]` - Set the items health stat bonus. This parameter is optional and can be omitted.
+      `[strength=x]` - Set the items strength stat bonus. This parameter is optional and can be omitted.
+      `[attack=x]` - Set the items attack stat bonus. This parameter is optional and can be omitted.
+      `[defence=x]` - Set the items defence stat bonus. This parameter is optional and can be omitted.
+      `[ranged=x]` - Set the items ranged stat bonus. This parameter is optional and can be omitted.
+      `[looting=x]` - Set the items looting stat bonus. This parameter is optional and can be omitted.
+      `[damage=x]` - Set the items damage stat. This parameter is optional and can be omitted.
+      `[reach=x]` - Set the items reach stat. This parameter is optional and can be omitted.
+      `[speed=x]` - Set the time, in seconds, that it takes to swing the item. This parameter is optional and can be omitted.
+      `[delay=x]` - Set the delay in seconds before the item can be swung again. This parameter is optional and can be omitted.
+      `[heal=x]` - Set the items heal power. This parameter is optional and can be omitted.
+
+      Item customizations via this command are not saved. Items will be reset to default on a world reload.
+
+      Examples:
+
+      Item [Bullet] [disable]
+      Disable the Bullet item.
+
+      Item [Revolver] [name=Musket] [desc=A Muskateers best friend.] [durability=1000]
+      Renames the Revolver to Musket, changes it's description, and sets it's durability to 1000.
+
+      Item [Revolver] [name=Musket] [desc=A Muskateers best friend.] [skill=cooking] [level=12] [health=200]
+      Renames the Revolver to Musket and changes it's description. The musket requires a cooking level of 12 to use. The musket has a health bonus stat of 200 points.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Kick
+    </Name>
+    <Description>
+      Kick: Kicks the player who activated the script from the multiplayer session.
+
+      Has no effect in single player.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Loop
+    </Name>
+    <Description>
+      Loop: Restarts the script from the top.
+
+      Loop
+      Loop [millisecs]
+
+      `[millisecs]` - Specify a time in milliseconds to wait before the script restarts. The value cannot be less than 2. If omitted a value of 16 (60 FPS) is used by default.
+
+      Examples:
+
+      Loop
+      This will cause the script to restart after 16 milliseconds.
+
+      Loop [1000]
+      This will cause the script to restart after 1000 milliseconds (1 second).
+
+      Note: Because of the nature of how scripts are queued for execution, these timings are not exact and should not be relied on to be exact.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Marker
+    </Name>
+    <Description>
+      Marker: Manipulates map markers.
+      Marker [name] [x,z]
+      Marker [name] [x,z] [admin]
+      Marker [name] [delete]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Menu
+    </Name>
+    <Description>
+      Menu: Prompt gamer with multiple choice menu items.
+
+      Menu [[text][script][x,y,z]] [[text][script][x,y,z]] [[text][script][x,y,z]] ...
+
+      Coordinate parameters are optional (can be omitted).
+      `[x,y,z] Absolute coordinate offset for the executed script.
+      `[rel:x,y,z] Relative coords are only supported if the script is executed from a script block.
+
+      Examples:
+
+      Menu [[Option 1][Script1]] [[Option 2][Script2]] [[Option 3][Script3]]
+
+      This will prompt the Gamer with a menu like so:
+
+      -------------
+      Option 1
+      Option 2
+      Option 3
+      Cancel
+      -------------
+
+      If Option 1 is selected by the gamer, Script1 will be executed.
+      If Option 2 is selected by the gamer, Script2 will be executed.
+      If Option 3 is selected by the gamer, Script3 will be executed.
+
+      Note:
+      Menu [[Option 1][Script1]] [[Option 2][Script2]]
+      and
+      Menu [[Option 1][Script1][rel:0,0,0]] [[Option 2][Script2][rel:0,0,0]]
+      are identical.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      MessageBox
+    </Name>
+    <Description>
+      MessageBox: Prompt gamer with multiple options.
+
+      MessageBox [nocancel] [text] [a=[text][script][x,y,z]] [x=[text][script][x,y,z]] [y=[text][script][x,y,z]]
+
+      `[nocancel]` - Omit the default B = Exit option.
+      `[text]` - Message.
+
+      Coordinate parameters are optional (can be omitted).
+      `[x,y,z] Absolute coordinate offset for the executed script.
+      `[rel:x,y,z] Relative coords are only supported if the script is executed from a script block.
+
+      Examples:
+
+      MessageBox [Hello [gamertag]] [a=[Lets do this][ScriptA]] [x=[Lets do that][ScriptX]] [y=[Lets do something else][ScriptY]]
+
+      This will prompt the Gamer with a message box like so:
+
+      ----------------------------
+      Hello [Gamer]
+
+      A  Lets do this
+      X  Lets do that
+      Y  Lets do something else
+      B  Exit
+      ----------------------------
+
+      If the gamer presses A, ScriptA will be executed and the message box is closed.
+      If the gamer presses X, ScriptX will be executed and the message box is closed.
+      If the gamer presses Y, ScriptY will be executed and the message box is closed.
+      If the gamer presses B, the message box is closed and no script is executed.
+
+      Note:
+      MessageBox [Hello [gamertag]] [a=[Lets do this][ScriptA]]
+      and
+      MessageBox [Hello [gamertag]] [a=[Lets do this][ScriptA][rel:0,0,0]]
+      are identical.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      NpcHealth
+    </Name>
+    <Description>
+      NpcHealth: Manipulate NPC current Health points.
+
+      NpcHealth [target] [qty] [milliseconds] [duration]
+      NpcHealth [zone] [npctype] [qty] [milliseconds] [duration]
+      NpcHealth [x,y,z] [x,y,z] [npctype] [qty] [milliseconds] [duration]
+
+      `[target]` - Only the target NPC from an Intersect command is affected.
+      `[zone]` - Only NPCs inside the zone will be affected. Temp zones are searched for first, then regular zones if no temp zone is found.
+      `[x,y,z] [x,y,z]` - Only NPCs inside the region will be affected.
+      `[npctype]` - The type of NPC to affect. Omit this parameter to affect all NPCs in the region.
+
+      `[qty]` - The number of points to add/subtract from the NPCs current health. A negative number will lower the NPCs health (cause damage).
+
+      `[milliseconds]` - Apply this effect every # of milliseconds. If this parameter is omitted, the effect is a one off. Minimum value is 16.
+
+      `[duration]` - Apply this effect for [duration] milliseconds then automatically stop. Only valid if [milliseconds] is also specified. If a [milliseconds] parameter is included, but this parameter is omitted, then the effect runs indefinitely.
+
+      NpcHealth commands can be stacked and are accumulative.
+
+      e.g. if you run these commands:
+
+      NpcHealth [zone] [20] [1000]
+      NpcHealth [zone] [-15] [1000]
+      The accumulative effect is +5 health points per second.
+
+      Examples:
+
+      NpcHealth [Wave] [10]
+      Add 10 health points to every NPC inside the zone called Wave.
+
+      NpcHealth [Wave] [Spider] [-20]
+      Subtract 20 health points from every spider inside the zone called Wave. This is a one off. If the players health reaches zero, they will die.
+
+      NpcHealth [100,200,300] [150, 210, 350] [-20] [1000]
+      Subtract 20 health points, every second (1000 milliseconds), from every NPC inside the region, for an indefinate period of time.
+
+      NpcHealth  `[100,200,300] [150, 210, 350] [TrollChief] [-2] [500] [10000]
+      Subtract 2 health points every half second, from every TrollChief in the region. Apply this effect for 10 seconds then stop.
+
+      if  Intersect [ray] [vrel:0,0,0] [vrel:10,0,0] [npc]
+      then  NpcHealth [target] [-20] // damage the NPC that the intersection hit.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      NpcSpawn
+    </Name>
+    <Description>
+      NpcSpawn: Spawn an NPC (Non Player Character).
+
+      NpcSpawn [x,y,z] [npctype]
+      NpcSpawn [x,y,z] [npctype] [kill=script]
+      NpcSpawn [x,y,z] [npctype] [loot=[x,y,z][item][item,count][item,count,dropchance]]
+      NpcSpawn [x,y,z] [npctype] [custom=[attack,50][strenth,70][defence,40]]
+      NpcSpawn [x,y,z] [npctype] [kill=script] [loot=[x,y,z][item][item,count][item,count,dropchance]]] [custom=[attack,50]]
+
+      `[x,y,z]` - The coordinate in the world where to spawn the NPC.
+      `[npctype]` - The type of NPC to spawn. Goblin, Spider, Werewolf, Zombie, Dryad, Djinn, Orc, TrollChief, Diablo, Duck, Sheep, Alpaca, AyrshireCow, HighlandCow.
+      `[kill=script]` - The name of the script to execute when the NPC is killed. This parameter is optional and is only executed if the NPC is killed by combat.
+      `[loot=[x,y,z][item][item,count][item,count,dropchance]]` - Custom loot drop table.
+
+      Examples:
+
+      NpcSpawn [100,200,300] [Goblin]
+      Spawns a Goblin at location 100,200,300.
+
+      NpcSpawn [200,210,300] [Spider] [kill=SpiderKilled]
+      Spawns a Spider at location 200,210,300.
+      When this spider is killed, the SpiderKilled script is executed.
+
+      NpcSpawn [200,210,300] [Spider] [custom=[attack,50][strength,80]]
+      Spawns a Spider at location 200,210,300.
+      This spider will have custom stats of attack level 50 and strenght level 80. All stats not specified will remain as default.
+
+      NpcSpawn [300,220,400] [Werewolf] [loot=[TitaniumKatana][Grass,20][GoldPieces,500,80]]
+      Spawns a Werewolf at location 300,220,400.
+      When this Werewolf is killed, it has a 100% chance of dropping a TitaniumKatana, a 100% chance of dropping 20 Grass blocks and an 80% chance of dropping 500 gold pieces.
+      Specifying a count and percent for loot items is optional. If no count is specified, it will default to 1. If no percent is specified, it will default to 100.
+
+      NpcSpawn [300,220,400] [Werewolf] [loot=[chance][Grass,20,50]]
+      Spawns a Werewolf at location 300,220,400.
+      When this Werewolf is killed, it has a 100% chance of dropping a chance item (standard random loot drop), and 50% chance of dropping 20 Grass blocks.
+
+      NpcSpawn [300,220,400] [Werewolf] [loot=[100,200,300]]
+      Spawns a Werewolf at location 300,220,400.
+      When this Werewolf is killed, it will drop a random item picked from the storage block at [100,200,300].
+
+      NpcSpawn [300,220,400] [Werewolf] [loot=[100,200,300][chance][Grass,20,50]]
+      Spawns a Werewolf at location 300,220,400.
+      When this Werewolf is killed, it's loot is sourced from the storage block located at [100,200,300]. It has a 100% chance of dropping a random item picked from the storage block (specified by the [chance] item) and a 50% chance of dropping 20 Grass blocks picked from the storage block.
+      Items are removed from the storage block when dropped by the NPC.
+      Sourcing loot from storage blocks is optional in the Creative game mode and mandatory in other game modes.
+      If no storage block exists at the location or the storage block is empty, the NPC will not drop loot.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      NpcState
+    </Name>
+    <Description>
+      NpcState: Set the state of all NPCs in a region.
+
+      NpcState [target] [state]
+      NpcState [zone] [state]
+      NpcState [zone] [state] [npctype]
+      NpcState [x,y,z] [x,y,z] [state]
+      NpcState [x,y,z] [x,y,z] [state] [npctype]
+      NpcState [move] [x,y,z]
+
+      `[target]` - Only the target NPC from an Intersect command is affected.
+      `[zone]` - Only NPCs inside the zone will be affected. Temp zones are searched for first, then regular zones if no temp zone is found.
+      `[x,y,z] [x,y,z]` - Only NPCs inside the region will be affected.
+      `[state]` - The state to set/change the NPCs to. This parameter is mandatory. Valid values are Death, Despawn and Delete.
+      `[npctype]` - The type of NPC to deactivate. Omit this parameter to deactivate all NPCs in the region.
+      `[move]` - Command the NPC to move to a location.
+
+      Differences between states:
+      Death kills the NPCs instantly, their death sound plays and their death animation plays.
+      Despawn causes the NPCs to despawn with their despawn animation.
+      Delete instantly removes the NPCs without sound or animation.
+
+      Examples:
+
+      NpcState [KillZone] [Delete]
+      All NPCs inside the zone called KillZone are instantly deleted. No animations or sounds are played.
+
+      NpcState [KillZone] [Death] [Werewolf]
+      All Werewolves inside the zone called KillZone are killed, their death sound plays and their death animation plays.
+
+      NpcState [100,200,300] [200,210,400] [Despawn] [Goblin]
+      All Goblins inside the region [100,200,300] [200,210,400] are despawned, their despawn animation plays.
+
+      if  Intersect [ray] [vrel:0,0,0] [vrel:10,0,0] [npc]
+      then  NpcState [target] [Death] // change the state of the NPC that the intersection hit.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      MoveBlock
+    </Name>
+    <Description>
+      MoveBlock: Moves a block from one location to another. All data and settings attached to block is moved with it. The source location is replaced with air.
+
+      MoveBlock [x,y,z] [x,y,z]
+
+      `[x,y,z]` - The 1st coordinate is the source location.
+      `[x,y,z]` - The 2nd coordinate is the destination location.
+
+      Examples:
+
+      MoveBlock [10,20,30] [110,120,130]
+      Moves the block and all it's associated data at location 10,20.30 to location 110,120,130. After the move, location 10,20,30 will contain empty air.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      MoveRegion
+    </Name>
+    <Description>
+      MoveRegion: Moves all the blocks from one region to another region. All data and settings attached to the blocks are moved to the new region. After a block is moved, it's original position is set to empty air.
+
+      MoveRegion [x,y,z] [x,y,z] [x,y,z]
+
+      `[x,y,z]` - The 1st coordinate is the minimum bound of the source region.
+      `[x,y,z]` - The 2nd coordinate is the maximum bound of the source region.
+      `[x,y,z]` - The 3rd coordinate is the minimum bound of the destination region.
+
+      Examples:
+
+      MoveRegion [100,200,300] [150,250,350] [10,20,30]
+      Moves all the blocks and all their associated data from 100,200,300 / 150,250,350 to the location starting at 10,20,30. The final block at 150,250,350 will be moved to 60,70,80.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Notify
+    </Name>
+    <Description>
+      Notify: Creates a notification message (pink messages at top left of screen).
+      Notify [text] [local|remote|global|admin|clan] [r,g,b]
+
+      `[local]` - Only local players (same xbox) see the message.
+      `[remote]` - Only remote players in the session see the message.
+      `[global]` - All players in the session see the message (identical to Local|Remote).
+      `[admin]` - All admins in the session see the message.
+      `[clan]` - All clan members see the message.
+      `[r,g,b]` - The back color of the notification in rgb format. r = red, g = green, b = blue. rgb are the 3 primary light colors and any color can be created with these 3 components. Possible values for each component are 0 - 255. This parameter may be omitted. If it is omitted, the default notification color is used.
+
+
+      Examples:
+
+      Notify [You are now Rank 5]
+      Notify [You are now Rank 5] [local]
+      Only local players on the same Xbox of the player who activated the script will see this notification.
+      Note: [local] is the default and can be omitted.
+
+      Notify [You are now Rank 5] [remote]
+      Only remote players (on other Xboxes) of the player who activated the script will see this notification.
+
+      Notify [[gamertag] is now Rank 5] [global]
+      Notify [[gamertag] is now Rank 5] [local|remote]
+      If the players gamertag is 'TotalMiner', all players in the session will see the notification 'TotalMiner is now Rank 5'.
+
+      Notify [Keep an eye on xxx] [admin]
+      All admins in the session will see the notification.
+
+      Notify [All [clan] members report to HQ] [clan] [0,255,0]
+      If the player who activated the script is in the Red Dragons clan, this command will notify 'All Red Dragon members report to HQ' to all players in the session who are in the Red Dragons clan.
+      The notification back color is green.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      OpenBlock
+    </Name>
+    <Description>
+      OpenBlock: Opens the standard interface screen for container blocks.
+
+      OpenBlock [x,y,z]
+
+      `[x,y,z]` - The coordinate of the block to open.
+
+      Examples:
+
+      OpenBlock [100,200,300]
+      Opens the block and presents the Block interface to the player.
+
+      Blocks that can be opened:
+
+      Crate
+      Chest
+      Safe
+      LockedChest
+      Bookcase
+      Furnace
+      ItemShop
+      BlockShop
+      Workbench
+      Book
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Particle
+    </Name>
+    <Description>
+      Particle: Emit an individual particle.
+
+      Particle [x,y,z] [template]
+      Particle [x,y,z] [duration] [velocity] [size] [startcolor] [gravity] [rotation] [velocityvariation] [endcolor] [emitposvariance] [emitposoffset]
+
+      `[x,y,z]` - The position (coordinate) in the world to spawn the particle.
+
+      `[template]` - A preset type of particle. Current presets are [Default], [Chimney], [Sparks], [SnowMachine], [AcidRain], [ForestFire].
+
+      `[duration]` - The duration of the particle, in seconds. Maximum duration is 8 seconds.
+
+      `[velocity]` - The velocity of the particle in meters per second. 3 comma separated values for the X, Y and Z axis.
+      `[size]` - Starting size of the particle and the end size multiplier. 4 comma separated values. The first 3 values are the initial size for the X, Y and Z axis, and the fourth number is the end size multiplier. The particle is spawned as the initial size, and interpolated to the initial size * end size multiplier over it's life time.
+
+      `[startcolor]` - The starting color of the particle specified in RGBA format (4 comma separated values with a range of 0-255).
+
+      `[gravity]` - The gravity of the particle in meters per second. Zero equals no gravity. Negative gravity is supported. If this parameter is omitted a value of zero is used (no gravity).
+
+      `[rotation]` - The rotation speed of the particle in radians per second. Zero equals no rotation. A positive number rotates clockwise, a negative number rotates anti-clockwise. If this parameter is omitted a value of zero is used (no rotation).
+
+      `[velocityvariation]` - This value allows randomized variation of the particles velocity as an offset to the base [velocity]. e.g. if the base [velocity] is 1,2,3 and the [velocityvariance] is [0.5, 1, 1.5] then the particles velocity will be in the range of [0.75/1.25, 1.5/2.5, 2.25/3.75]. If this parameter is omitted a value of [0,0,0] is used (no variation).
+
+      `[endcolor]` - The ending color of the particle specified in RGBA format (4 comma separated values with a range of 0-255). The particles color will be interpolated from the start color to the end color over it's lifetime. If this parameter is omitted the end color will equal the start color (no change in color).
+
+      `[emitposvariance]` - Similar to [velocityvariance] except this value works against the base position. It allows particles to be spawned over a randomized area around the base position. If this parameter is omitted a value of [0,0,0] is used (no variation).
+
+      `[emitposoffset]` - This parameter allows you to offset the particles spawn position against the base [position].
+
+
+      Examples:
+
+      Particle [100,200,150] [Chimney]
+      Spawns a single smoke particle that rises into the air, changing color from dark to light gray as it rises.
+
+      Particle [100,200,150] [4.5] [5.2,4.3,3.5] [0.5,0.6,0.7,3] [255,255,0,255]
+      Spawns a single particle that lasts for 4.5 seconds. It has a constant velocity of 5.2,4.3,3.5 mps. The size of the particle starts at 0.5,0.6,0.7 and ends at 1.5,1.8,2.1. It's color is a constant yellow. It has not rotation, velocity variance, color change, position variance or position offset.
+      Particle [100,200,150] [4.5] [5.2,4.3,3.5] [0.5,0.6,0.7,3] [255,255,0,255] [2] [1.57] [1,1,1] [255,0,0,255] [5,5,5] [0,2,0]
+      Spawns a single particle that lasts for 4.5 seconds. It has a constant velocity of between 4.7,3.8,3.0 and 5.7,4.8,4.0 mps. The size of the particle starts at 0.5,0.6,0.7 and ends at 1.5,1.8,2.1. It's color starts at yellow and interpolates to red over its lifetime. It has gravity of 2 mps. It has a rotation of 1.57 radians per second (approximately 1 full spin every 4 seconds). The particle may spawn within [-2.5,-2.5,-2.5] and [2.5,2.5,2.5] of the base position. The particles base position is offset by 2 meters up.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      ParticleEmitter
+    </Name>
+    <Description>
+      ParticleEmitter: Creates a particle emitter that emits particles at a specified frequency over a specified length of time.
+
+      ParticleEmitter [x,y,z] [emitterduration] [template] [emitfreq]
+      ParticleEmitter [x,y,z] [emitterduration] [emitfreq] [duration] [velocity] [size] [startcolor] [gravity] [rotation] [velocityvariation] [endcolor] [emitposvariance] [emitposoffset]
+
+      `[x,y,z]` - The position (coordinate) in the world of the emitter.
+
+      `[emitterduration]` - The emitter will be active emitting particles for this duration in seconds and then be automatically removed.
+
+      `[template]` - A preset type of particle to emit. Current presets are [Default], [Chimney], [Sparks], [SnowMachine], [AcidRain], [ForestFire].
+
+      `[emitfreq]` - The frequency in seconds to emit the particles.
+
+      `[duration]` - The duration of the particle, in seconds. Maximum duration is 8 seconds.
+
+      `[velocity]` - The velocity of the particles in meters per second. 3 comma separated values for the X, Y and Z axis.
+      `[size]` - Starting size of the particles and the end size multiplier. 4 comma separated values. The first 3 values are the initial size for the X, Y and Z axis, and the fourth number is the end size multiplier. The particles are spawned as the initial size, and interpolated to the initial size * end size multiplier over it's life time.
+
+      `[startcolor]` - The starting color of the particles specified in RGBA format (4 comma separated values with a range of 0-255).
+
+      `[gravity]` - The gravity of the particle in meters per second. Zero equals no gravity. Negative gravity is supported. If this parameter is omitted a value of zero is used (no gravity).
+
+      `[rotation]` - The rotation speed of the particles in radians per second. Zero equals no rotation. A positive number rotates clockwise, a negative number rotates anti-clockwise. If this parameter is omitted a value of zero is used (no rotation).
+
+      `[velocityvariation]` - This value allows randomized variation of the particles velocity as an offset to the base [velocity]. e.g. if the base [velocity] is 1,2,3 and the [velocityvariance] is [0.5, 1, 1.5] then the particles velocity will be in the range of [0.75/1.25, 1.5/2.5, 2.25/3.75]. If this parameter is omitted a value of [0,0,0] is used (no variation).
+
+      `[endcolor]` - The ending color of the particles specified in RGBA format (4 comma separated values with a range of 0-255). The particles color will be interpolated from the start color to the end color over it's lifetime. If this parameter is omitted the end color will equal the start color (no change in color).
+
+      `[emitposvariance]` - Similar to [velocityvariance] except this value works against the base (emitter) position. It allows particles to be spawned over a randomized area around the base position. If this parameter is omitted a value of [0,0,0] is used (no variation).
+
+      `[emitposoffset]` - This parameter allows you to offset the particles spawn position against the base (emitter) position.
+
+
+      Examples:
+
+      ParticleEmitter [100,200,150] [Chimney]
+      Emits chimney smoke particles that rises into the air, changing color from dark to light gray as it rises. The particles are emitted at the frequency defined by the template.
+
+      ParticleEmitter [100,200,150] [Chimney] [0.1]
+      Emits chimney smoke particles at a custom frequency (1 particle every 0.1 of a second or 10 particles per second).
+
+      ParticleEmitter [100,200,150] [20] [1] [4.5] [5.2,4.3,3.5] [0.5,0.6,0.7,3] [255,255,0,255]
+      Emits particles at 1 particle per second for 20 seconds. Each particle lasts for 4.5 seconds. It has a constant velocity of 5.2,4.3,3.5 mps. The size of the particle starts at 0.5,0.6,0.7 and ends at 1.5,1.8,2.1. It's color is a constant yellow. It has not rotation, velocity variance, color change, position variance or position offset.
+      Particle [100,200,150] [30] [0.5] [4.5] [5.2,4.3,3.5] [0.5,0.6,0.7,3] [255,255,0,255] [2] [1.57] [1,1,1] [255,0,0,255] [5,5,5] [0,2,0]
+      Emits particles at 2 particles per second for 30 seconds. Each particle lasts for 4.5 seconds. It has a constant velocity of between 4.7,3.8,3.0 and 5.7,4.8,4.0 mps. The size of the particle starts at 0.5,0.6,0.7 and ends at 1.5,1.8,2.1. It's color starts at yellow and interpolates to red over its lifetime. It has gravity of 2 mps. It has a rotation of 1.57 radians per second (approximately 1 full spin every 4 seconds). The particle may spawn within [-2.5,-2.5,-2.5] and [2.5,2.5,2.5] of the base position. The particles base position is offset by 2 meters up.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Pickup
+    </Name>
+    <Description>
+      Pickup: Manipulates item pickups.
+
+      Pickup [clear]
+      Pickup [x,y,z] [item] [qty]
+
+      `[clear]` - Clear all pickups in the world.
+
+      `[x,y,z]` - The coordinate in the world where the pickup is to spawn.
+
+      `[item]` - The name of the item to spawn.
+
+      `[qty]` - The quantity of the item in the pickup. This parameter may be omitted, and a value of one (1) will be used.
+
+      Examples:
+
+      Pickup [100,200,150] [WoodSword]
+      Spawns a pickup at location 100,200,150 for 1 WoodSword.
+
+      Pickup [300,150,250] [Grass] [50]
+      Spawns a pickup at location 300,150,250 for 50 Grass blocks.
+
+      Pickup [clear]
+      Clears all pickup's in the world.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Paste
+    </Name>
+    <Description>
+      Paste: Pastes a component
+
+      Paste [pack:component] [x,y,z] [facing] [copytype]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Permission
+    </Name>
+    <Description>
+      Permission: Manipulates player permissions. Only the permissions of the player who activated the script are affected.
+
+      Permission [permission] [on|off]
+
+      `[permission]` - The permission to set. Adventure, Edit, Creative, Fly, Map, VoiceChat, TextChat.
+
+      `[on|off]` - Determines if the permission is to be set on or off.
+
+      Examples:
+
+      Permission [voicechat] [off]` - sets the voice chat permission off.
+      Permission [edit] [on]` - sets the edit permission on.
+
+      Valid Permissions:
+      Adventure, Edit, Creative, Fly, Map, VoiceChat, TextChat, Spectate, Shops, ViewScripts.
+
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      ReplaceRegion
+    </Name>
+    <Description>
+      ReplaceRegion: Replaces all occurrences of a block in a region with another block.
+
+      ReplaceRegion [x,y,z] [x,y,z] [block1] [block2]
+
+      `[x,y,z]` - The 1st coordinate is the minimum bound of the replace region.
+      `[x,y,z]` - The 2nd coordinate is the maximum bound of the replace region.
+
+      `[block1]` - The Block to be replaced.
+      `[block2]` - The Block to replace with.
+
+      Examples:
+
+      ReplaceRegion [100,200,300] [150,250,350] [Limestone] [Marble]
+      Replaces all Limestone blocks within the 100,200,300 / 150,250,350 bound with Marble.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Rain
+    </Name>
+    <Description>
+      Rain: Creates a rain weather effect
+
+      Rain [x,z] [radius] [duration] [intensity]
+      Rain [x,z] [radius] [duration] [intensity] [r,g,b]
+      Rain [x,z] [delete]
+
+      `[x,z]` - The surface coordinate for the center of the rain storm.
+
+      `[radius]` - The radius of the rain storm in blocks.
+
+      `[duration]` - The duration of the rain storm in seconds.
+
+      `[intensity]` - The strength the rain storm. Valid values are 1 - 100, with 1 being the weakest and 100 the strongest.
+
+      `[r,g,b]` - The color of the rain drops in rgb format. r = red, g = green, b = blue. rgb are the 3 primary light colors and any color can be created with these 3 components. Possible values for each component are 0 - 255. This parameter may be omitted. If it is omitted, a random translucent bluish gray color is used.
+
+      `[delete]` - Deletes the current Rain effect at [x,z]
+
+      Examples:
+
+      Rain [100,200] [100] [20] [50]
+      Creates a rain storm at surface coordinate 100,200, with a radius of 100 blocks. The storm lasts for 20 seconds and is half strength. A random bluish gray color is used.
+
+      Rain [300,800] [70] [120] [75] [200,200,200]
+      Creates a rain storm at surface coordinate 300,800, with a radius of 70 blocks. The effect lasts for 2 minutes and is 3/4 strength. The color of the hail stones is a light whitish gray.
+
+      Rain [300,800] [delete]
+      Deletes the current Rain effect at [300,800]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Script
+    </Name>
+    <Description>
+      Script: Executes another script.
+
+      Script [name]
+      Script [name] [cancel] [all]
+      Script [name] [wait] [offset] [x,y,z] [vars:name,name,..] [out:name,name,..]
+
+      `[name]` - The name of the script to execute. Script names support logical folders, so insert forward slashes in your script names where required.
+
+      `[cancel]` - Indicates the script should be cancelled (removed from the execution queue). Only the instance for the current player will be cancelled. If you include the [all] parameter, all instances of the script for all players will be cancelled.
+
+      `[wait]` - Instructs the runtime to halt execution of the calling script until the called script has completed. This parameter is optional, and if omitted, the calling script will continue to execute without waiting on the called scipt. Note, this parameter is automatic if [out:..] is used.
+
+      `[offset]` - Optional offset coordinate. If a script is executed with an offset coordinate, then every coordinate encountered while executing the script has the offset added to it.
+
+      `[vars:name,name,..]` - Optional comma separated list of all variables you wish to pass to the script. These variables are passed by value, that is, if the called script modifies the variables, the calling scripts copies of the variables are unaffected.
+
+      `[out:name,name,..]` - Same as [vars:] except these variables are passed by reference, that is, if the called script modifies the variables, the calling scripts copies of the variables are also modified. This provides a mechanism for the called script to pass information back to it's calling script. If this option is used, the [wait] parameter is automatic.
+
+
+      Examples:
+
+      Script [CloseDoor]
+      Executes the script CloseDoor
+
+      Script [Bank\PowerSafe] [offset] [10,11,12]
+      Executes the script Bank\PowerSafe and adds 10,11,12 to every coordinate encountered in the script.
+
+      Script [Magic\AirStrike] [vars:mana]
+      Executes the script Magic\AirStrike and passes the variable 'mana' (and it's value) to the script.
+
+      Script [Magic\AirStrike] [vars:mana,focus,power]
+      Executes the script Magic\AirStrike and passes the variables 'mana', 'focus' and 'power' (and their values) to the script.
+
+      Script [Bank\PowerSafe] [offset] [10,11,12] [vars:keycode]
+      Executes the script Bank\PowerSafe and adds 10,11,12 to every coordinate encountered in the script. It also passes the variable 'keycode'.
+
+      Script [Bank\PowerSafe] [wait] [offset] [10,11,12] [vars:keycode]
+      Same as above except the calling script will wait for Bank\PowerSafe to complete before it continues execution.
+
+      Script [Bank\PowerSafe] [offset] [10,11,12] [vars:keycode] [out:valid]
+      Same as above except Bank\PowerSafe can modify the value of the variable called 'valid' and the valid variable in the calling script will be updated to match. Note the [wait] parameter is omitted, but automatic if the [out:] parameter is used.
+
+      Script [Bank\PowerSafe] [cancel]
+      Cancel the instance of the script Bank\PowerSafe for the current player.
+
+      Script [Bank\PowerSafe] [cancel] [all]
+      Cancel all instances of the script Bank\PowerSafe.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetBlockScript
+    </Name>
+    <Description>
+      SetBlockScript: Assigns a script to blocks that can execute scripts.
+
+      SetBlockScript [x,y,z] [name]
+      SetBlockScript [x,y,z] [name] [type]
+
+      `[x,y,z]` - The coordinate of the block.
+      `[name]` - The name of the script to be assigned.
+      `[type]` - Optional parameter for blocks that can have multiple scripts attached. The value of type can be [entry|exit|poweron|poweroff|kill|talk].
+
+      Examples:
+
+      SetBlockScript [100,200,150] [Explode]
+      This assigns the 'Explode' script to the block located at location 100,200,150.
+
+      SetBlockScript [200,250,150] [close] [poweroff]
+      This assigns the 'Close' script as the PowerOff script to the script block located at location 200,250,150.
+
+      SetBlockScript [200,250,150] [track] [entry]
+      This assigns the 'Track' script as the Entry script to the proximity detector block located at location 200,250,150.
+
+      SetBlockScript [200,250,150] [npckilled] [kill]
+      This assigns the 'NPCKilled' script as the Kill script to the NPC spawner block located at location 200,250,150.
+
+      SetBlockScript [200,250,150] [npctalk] [talk]
+      This assigns the 'NPCTalk' script as the Talk script to the NPC spawner block located at location 200,250,150.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetEventScript
+    </Name>
+    <Description>
+      SetEventScript: Assigns a script to be executed on certain game events.
+
+      SetEventScript [event] [name]
+      SetEventScript [event] [item] [name]
+      SetEventScript [event] [text] [name] [x,y] [scale]
+
+      `[event]` - The type of event you want the script assigned to. Currently supported events are PlayerDeath, PlayerJoin, PlayerLeave, PlayerRespawn, CustomMenu, ItemSwing, ButtonX, ButtonY, ButtonB.
+      `[item]` - Only used with the ItemSwing and ItemEquip event. Specify which item is to execute the script when it is swung. If [item] is omitted, the event script will be executed for any item.
+      `[text]` - Only used with the ButtonX, ButtonY or ButtonB events. Specify the text which is displayed next to the button icon.
+      `[name]` - The name of the script to be executed when the event occurs. If the name is omitted any previously assigned script will be unassigned from the event.
+      `[x,y]` - The position of the text on the screen. This is only used for ButtonX|Y|B events. If omitted, a position under your reticle is used.
+      `[scale]` - The scale of the text on the screen. This is only used for ButtonX|Y|B events. If omitted, a scale of 0.7 is used.
+
+
+      Examples:
+
+      SetEventScript [PlayerJoin] [Events\PlayerJoin]
+      This assigns the 'Events\PlayerJoins' script to the PlayerJoins event.
+
+      SetEventScript [PlayerJoin]
+      This unassigns any script that was previously assigned to the PlayerJoin event.
+
+      SetEventScript [CustomMenu] [MyCustomMenu]
+      Whenever someone selects the Custom menu item on the Pause menu, the MyCustomMenu script is executed.
+
+      SetEventScript [ItemSwing] [SteelSword] [Events\SteelSwordSwing]
+      Whenever a player swings a steel sword, the Events\SteelSwordSwing script is executed.
+
+      SetEventScript [ItemSwing] [Events\ItemSwing]
+      Whenever a player swings any item, the Events\ItemSwing script is executed.
+
+      SetEventScript [ItemEquip] [IronShovel] [Events\IronShovelEquip]
+      Whenever a player equips an Iron Shovel, the Events\IronShovelEquip script is executed.
+
+      SetEventScript [ButtonX] [Spring Trap] [Events\SpringTrap]
+      Message: 'X - Spring Trap' is displayed below the player reticle. When the player presses the X button, the Events\SpringTrap script is executed.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetBlock
+    </Name>
+    <Description>
+      SetBlock: Sets the block at a location.
+
+      SetBlock [x,y,z]
+      SetBlock [x,y,z] [block]
+      SetBlock [x,y,z] [block] [aux]
+
+      `[x,y,z]` - The coordinate of the block to set.
+      `[block]` - The block to set. If this parameter is omitted, then [none] is used.
+      `[aux]` - Auxillary data.
+      Examples:
+
+      SetBlock [100,200,300] [Limestone]
+      Sets the block at location 100,200,300 to Limestone.
+
+      SetBlock [100,200,300]
+      Clears the block at location 100,200,300 (Set's it to None).
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetNameplate
+    </Name>
+    <Description>
+      SetNameplate: Sets player or NPC nameplate settings.
+
+      SetNameplate [off|short|far]
+      SetNameplate [off|short|far] [player|clan]
+      SetNameplate [on|off] [npc]
+      SetNameplate [on|off] [player|clan] [npc]
+
+      `[on|off|short|far]` - The nameplate setting to use.
+      `[npc]` - Specifies that the command affects the NPC nameplate setting, otherwise if omitted the command affects player nameplate settings.
+
+      Examples:
+
+      SetNameplate [off]
+      Turns off player nameplates for all players in the session.
+
+      SetNameplate [short]
+      Sets player nameplates to short for all players in the session.
+
+      SetNameplate [off] [player]
+      Turns off the nameplate only for the player that activated the script.
+
+      SetNameplate [off] [clan]
+      Turns off the nameplate only for players in the clan of the player that activated the script.
+
+      SetNameplate [on] [npc]
+      Turns on NPC nameplates for all players in the session.
+
+      SetNameplate [on] [player] [npc]
+      Turns on NPC nameplates for the player that activated the script.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetPower
+    </Name>
+    <Description>
+      SetPower: Sets the power state of a block.
+
+      SetPower [x,y,z] [on|off]
+
+      `[x,y,z]` - The coordinate of the block.
+      `[on|off]` - The power state to set.
+
+      Examples:
+
+      SetPower [100,200,300] [on]
+      Sets the power state of the block at location 100,200,300 to on (powered).
+
+      SetPower [100,200,300] [off]
+      Sets the power state of the block at location 100,200,300 to off (unpowered).
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetReach
+    </Name>
+    <Description>
+      SetReach: Sets the distance players can reach (target) blocks.
+
+      SetReach [distance] [player|clan]
+
+      `[distance]` - A value from 1 to 15. If distance is omitted, the default value is used.
+
+      Examples:
+
+      SetReach [10]
+      Sets the reach to 10 for all players in the session.
+
+      SetReach [5] [player]
+      Sets the reach to 5 only for the player who activated the script.
+
+      SetReach [4] [clan]
+      Sets the reach to 4 for all players in the clan of the player who activated the script.
+
+      SetReach
+      Sets the reach to the default distance for all players in the session.
+
+      SetReach [player]
+      Sets the reach to the default distance for the player who activated the script.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetRegion
+    </Name>
+    <Description>
+      SetRegion: Sets all the block ids in a region.
+      SetRegion [x,y,z] [x,y,z]
+      SetRegion [x,y,z] [x,y,z] [block]
+      SetRegion [x,y,z] [x,y,z] [block] [percent] [seed]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetRegionAux
+    </Name>
+    <Description>
+      SetRegionAux: Sets all the block aux in a region.
+      SetRegionAux [x,y,z] [x,y,z] [high|low] [aux]
+      SetRegionAux [x,y,z] [x,y,z] [high|low] [aux] [percent] [seed]
+
+      `[high|low]` - high or low is mandatory. high means the aux value will replace the high 4 bits of aux. low means aux will replace the low 3 bits.
+      `[aux]` - Valid values for high bits are 0 - 15 inclusive. Valid values for low bits are 0 - 7 inclusive.
+
+      `[high] is used for decals and textures.
+      `[low] is used for orientation and other block specific data.
+
+      The max region size is 500k blocks.
+      Aux data is validated by block type to restrict invalid values that may cause errors.
+      The 4th low bit is used by the game and is not mutable.
+
+      Examples:
+
+      SetRegionAux [100,200,100] [300,210,300] [low] [2]
+      This will replace the low 3 bits of all block aux data in the region with the value of 2.
+
+      SetRegionAux [100,200,100] [300,210,300] [high] [6] [20] [3000]
+      This will replace the high 4 bits of a random 20 percent of block aux data in the region with the value of 6, using seed 3000.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetSphere
+    </Name>
+    <Description>
+      SetSphere: Creates a sphere of blocks.
+      SetSphere [x,y,z] [radius] [block]
+      SetSphere [x,y,z] [radius] [block] [percent] [seed]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetSwitch
+    </Name>
+    <Description>
+      SetSwitch: Manipulates switches and buttons.
+
+      SetSwitch [x,y,z] [on|off|toggle]
+
+      `[x,y,z]` - The coordinate of the switch.
+      `[on|off|toggle]` - The state to set.
+
+      Examples:
+
+      SetSwitch [100,200,300] [on]
+      Sets the switch at location 100,200,300 to on. This will cause adjacent blocks to be powered.
+
+      SetSwitch [100,200,300] [off]
+      Sets the switch at location 100,200,300 to off. This will cause adjacent blocks to be unpowered (if they are not being powered by another power emitter block).
+
+      SetSwitch [100,200,300] [toggle]
+      Toggles the switch at location 100,200,300. If the switch was on before this command is executed, the switch will be set to off. If the switch was off before this command is executed, the switch will be set on.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetText
+    </Name>
+    <Description>
+      SetText: Sets the text of blocks that have text properties. SetText works on Signs, NPCs and Books.
+
+      SetText [x,y,z] [text]
+      SetText [x,y,z] [text] [name]
+      SetText [x,y,z] [text] [page]
+
+      `[x,y,z]` - The coordinate of the block to set text for. For NPCs this is the coordinate of the NPCSpawner block.
+
+      `[text]` - The desired text.
+
+      `[name]` - Indicates that [text] is to name the block. For NPCs [text] will be the NPCs name. For books [text] will be the book title. [name] is not used for sign blocks.
+
+      `[page]` - The page number of the book the text is for. Valid numbers are 1 - 1000. The [page] parameter is not used for NPCs or signs.
+
+      Examples:
+
+      SetText [100,200,300] [Welcome_to_Rohan]
+      Sets the text of the block at location 100,200,300. If the block is an NPCSpawner, this command sets the speech of the NPC. If the block is a Book, this command sets the text for page 1.
+
+      SetText [100,200,300] [Charlie] [name]
+      Sets the name of the block at location 100,200,300. If the block is an NPC, the NPC is named Charlie. If the block is a book, the books title is Charlie.
+
+      SetText [100,200,300] [Once upon a time] [2]
+      Sets the text for page 2 of a book at location 100,200,300.
+
+      SetText [100,200,300] [Once upon a time [gamertag] appeared]
+      If the players gamertag is Tota1Miner, then the text is set as 'Once upon a time Tota1Miner appeared'.
+
+      SetText [100,200,300] [Once upon a time the [clan] appeared]
+      If player is in the 'Red Dragons' clan, then the text is set as 'Once upon a time the Red Dragons appeared'.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SetTexture
+    </Name>
+    <Description>
+      SetTexture: Sets the texture for a block that has multiple texture capability. SetTexture can also be used to set a decal on a block that supports decals.
+
+      SetTexture [x,y,z] [id]
+
+      `[x,y,z]` - The coordinate of the block whose texture/decal you wish to set.
+
+      `[id]` - The zero based id number of the texture or decal. Valid values are 0 - 15. 0 = the default texture. id numbers go from bottom left (default texture) to top right as you see them on the lower section of the texture select screen. If the id used does not have a texture selected, the default is used.
+
+      Examples:
+
+      SetTexture [100,200,300] [4]
+      Sets the texture of the block located at 100,200,300 to the 4th selected texture for that block type.
+      Sets the decal of the block located at 100,200,300 to the 4th decal.
+
+      SetTexture [100,200,300] [0]
+      Sets the texture of the block located at 100,200,300 to the blocks default texture.
+      Removes any decal from the block located at 100,200,300.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Skill
+    </Name>
+    <Description>
+      Skill: Sets a players skill level.
+
+      This command is only executed on worlds using Local Skills.
+
+      Skill [name] [+|-|level]
+
+      `[name]` - The name of the skill.
+      `[+|-|level]` - The level to set the skill to or use + to add levels or - to subtract levels.
+
+      Examples:
+
+      Skill [Attack] [10]
+      Sets the players Attack skill to level 10 regardless of what it was before.
+
+      Skill [Building] [+2]
+      Adds 2 levels to the players current Building level.
+
+      Skill [Cooking] [-3]
+      Subtracts 3 levels from the players current Cooking level.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SkillXP
+    </Name>
+    <Description>
+      SkillXP: Set, add or subtract a players current skill XP.
+
+      This command is only executed on worlds using Local Skills.
+
+      SkillXP [name] [+|-|xp]
+
+      `[name]` - The name of the skill.
+      `[+|-|xp]` - The xp to set for the skill or use + to add xp or - to subtract xp.
+
+      Examples:
+
+      SkillXP [Attack] [1000]
+      Sets players current Attack XP to 1000.
+
+      SkillXP [Defence] [+3000]
+      Adds 3000 XP to the players current Defence XP.
+
+      SkillXP [Strength] [-2000]
+      Subtracts 2000 XP from the players current Strength XP.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      SkyColor
+    </Name>
+    <Description>
+      SkyColor: Customize the color of the sky.
+
+      SkyColor [r,g,b|delete] [player] [intensity] [transition]
+
+      `[r,g,b|default]` - The custom color or 'delete' to remove a previous custom color.
+      `[player]` - If this parameter is included, the color is applied only to the player who activated the script, otherwise it is applied to everyone, globally.
+      `[intensity]` - The intensity of the color as a percentage (0 - 100%).
+      `[transition]` - The amount of time to transition to the new color, specified in milli-seconds. If this parameter is omitted, it is defaulted to [5000].
+
+      Examples:
+
+      SkyColor [100,200,250]
+      Transition the sky color to r=100,g=200,b=250 over 3 seconds (3000 milliseconds) using an intensity of 100%, for all players, globally.
+
+      SkyColor [100,200,250] [70]
+      Transition the sky color to r=100,g=200,b=250 over 3 seconds, using an intensity of 70%, for all players, globally.
+
+      SkyColor [100,200,250] [player] [70]
+      Transition the sky color to r=100,g=200,b=250 over 3 seconds, using an intensity of 70%, for only the player who activated the script.
+
+      SkyColor [100,200,250] [70] [2000]
+      Transition the sky color to r=100,g=200,b=250 over 2 seconds, using an intensity of 70%, for all players, globally.
+
+      SkyColor [delete]
+      Removes any previous custom global sky color.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Sound
+    </Name>
+    <Description>
+      Sound: Play a sound.
+
+      Sound [name] [x,y,z] [volume] [range] [loop, delay=x, count=x]
+      Sound [name] [x1,y1,z1] [x2,y2,z2] [volume] [loop, delay=x, count=x]
+      Sound [name] [zone] [volume] [loop, delay=x, count=x]
+
+      Sound [name] [x,y,z] [delete]
+      Sound [name] [x1,y1,z1] [x2,y2,z2] [delete]
+      Sound [name] [zone] [delete]
+
+      `[name]` - The name of the sound. Valid names listed below.
+
+      `[x,y,z]` - The coordinate of the source of the sound.
+
+      `[x1,y1,z1] [x2,y2,z2]` - Zone for the sound to play in.
+
+      `[zone]` - Zone for the sound to play in.
+
+      `[delete]` - Delete a previously created sound. The name and coordinate(s) or zone must be supplied. Sounds that omit the loop parameter do not need to be deleted, they delete themselves after playing. Sounds that specify a loop count do not need to be deleted, they delete themselves after playing the number of loops specified. All other sounds must be deleted with the [delete] parameter if you want them to stop.
+
+      `[volume]` - A value between 1 and 100. 1 = very low volume, 100 = full volume. If omitted then volume defaults to 100.
+
+      `[range]` - A value between 1 and 1000. The defines how far the sound can be heard from the source location. If omitted then range defaults to 32. This value is ignored if it used for a zoned sound.
+
+      `[loop, delay=x, count=x]` - If the loop parameter is omitted the sound will play once and then stop.
+      delay=x where x is the number of milliseconds to delay between each loop. If omitted it defaults to 0 (zero) no delay.
+      count=x where x is the number of times to loop the sound. If omitted the sound will loop continuously until it is deleted.
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Teleport
+    </Name>
+    <Description>
+      Teleport: Teleports entities.
+
+      Teleport [player] [x,y,z]
+      Teleport the player who activated the script to coordinates [x,y,z]. Relative coordinates are supported.
+
+      Teleport [x1,y1,z1] [x2,y2,z2] [x3,y3,z3] [absolute|relative]
+      Teleport all entities (players and NPCs) inside the [x1,y1,z1] [x2,y2,z2] region to the coordinate [x3,y3,z3].
+
+      Entities will not be teleported if the destination contains solid blocks (otherwise they'd be stuck inside the block).
+
+      Examples:
+
+      Teleport [player] [300,201,400]
+      Teleport the player who activated the script to coordinate 300,201,400. Coordinates 300,201,400 and 300,202,400 must not contain solid blocks.
+
+      Teleport [0,1,0] [1023,511,1023] [512,201,512] [absolute]
+      Teleport all players and NPCs in the world to coordinate 512,201,512.
+
+      Teleport [100,200,100] [150,201,150] [200,201,200] [relative]
+      Teleport all players and NPCs inside the region [100,200,100] [150,201,150] to [200,201,200]. Each entities relative position to the minimum region corner [100,200,100] will be maintained at the destination. e.g. if the player is at location 110,201,120, they will be teleported to 210,201,220. (110-100,201-201,120-100) + (200,201,200).
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      TintColor
+    </Name>
+    <Description>
+      TintColor: Applies a multiplicative tint color to the texture pack. When a TintColor command is executed, it replaces any active Tint.
+
+      TintColor [r,g,b|delete] [player] [transition]
+
+      `[r,g,b|delete]` - The tint factor or 'delete' to remove the current tint.
+
+      Tints are multiplicative factors applied to the pixel colors on your screen. Each tint component is specified as a percentage. A percentage &lt; 100 will reduce the corresponding color component in the pixel. A percentage &gt; 100 will increase the color component, and a percentage of 100 will leave the corresponding color component of the pixel unchanged.
+
+      e.g. if you specify a tint of [50, 200, 25), and the pixel color is [128, 128, 128] (gray), then the final color will be [64, 256, 32] = which is a greenish tint with a small amount of red and even smaller amount of blue. The closer the tint value is to 100, the less effect (intensity) it has on the final color.
+
+      `[player]` - If this parameter is included, only the player who executed the script will see the tint, otherwise all players will see it.
+
+      `[transition]` - The time to transition the tint on (fade it in), specified in milliseconds. If this parameter is omitted a default value of 3000 (3 seconds) is used. If a value of 0 (zero) is used, the transition is instant.
+
+      Restrictions:
+      There are some restrictions with dramatic rapid color changes in order to remove the possibility of seizure causing color changes.
+
+      Examples:
+
+      TintColor [50, 200, 25]
+      The final color after this tint factor is applied will be 1/2 of the pixels red component, twice the green component, and 1/4 of the blue component, which will cause a mostly greenish tint for most colors. All players will see the tint. The tint will transition on over 3 seconds.
+
+      TintColor [150, 100, 100] [player]
+      The final color after this tint factor is applied will be 1.5 x the red component. The green and blue components remain unchanged. Only the player who executed the script will see the tint. The tint will transition on over 3 seconds.
+
+      TintColor [10, 0, 200] [player] [2000]
+      The final color after this tint factor is applied is 1/10 of the red component, zero green component and twice the blue component which will usually cause a strong blue tint. Only the player who executed the script will see the tint. The tint will transition on over 2 seconds.
+
+      TintColor [delete] [1000]
+      Removes the current tint. The tint will transition off over 1 second.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Var
+    </Name>
+    <Description>
+      Var: Declare variables and assign values.
+
+      var [name] [name]...[name]
+      var [name] = [value] op [value]...op [value]
+
+      There are two forms of the var command. One declares one or more variable names, the other assigns a value to a single variable, based on an expression.
+      A script cannot have more than 256 variables.
+
+      `[name]` - The name of the variable. Variable names cannot have spaces or contain any of the following characters: :~`!@#$%^&amp;*()-=+|\\/?&lt;&gt;,.
+      Variable names cannot be one of the following: var, true, false, on, off, player, clan, history, syshistory, clanhistory, health, maxhealth, reach.
+      Variable names are not case sensitive.
+
+      `[value] op [value]...op [value]` - An expression made up of one or more values and operators. Operators do not need to be surrounded by square brackets.
+      `[value] may be a numeric literal, another variable or a built in value type as listed below.
+
+      Built in [value] types:
+      `[Abs:x]` - The absolute value of x.
+      `[Sin:x]` - The sine of x.
+      `[Cos:x]` - The cosine of x.
+      `[Tan:x]` - The tangent of x.
+      `[Sqrt:x]` - The square root of x.
+      `[Single:x]` - x converted to single precision.
+      `[Int:x]` - x converted to an integer.
+      `[Neg:x]` - Negate x.
+      `[-x]` - Same as [Neg:x].
+      `[pi:]` - The value of PI.
+      `[Clock:]` - The current clock.
+      `[Health:]` - The players current health.
+      `[MaxHealth:]` - The players current max health.
+      `[Reach:]` - The players current reach.
+      `[Pos:x|y|z]` - The players current X, Y or Z position.
+      `[Eye:x|y|z]` - The players current X, Y or Z eye position.
+      `[Vel:x|y|z]` - The players current X, Y or Z velocity.
+      `[View:x|y|z]` - The players current X, Y or Z view direction.
+      `[Rel:x|y|z]` - The scripts relative block X, Y or Z.
+      `[PRel:x|y|z]` - The players block position X, Y or Z.
+      `[CRel:x|y|z]` - The players cursor X, Y or Z.
+      `[Script:x|y|z]` - The scripts X, Y or Z offset.
+      `[Skill:x]` - The players current skill level.
+      `[Skillxp:x]` - The players current skill xp.
+      `[Rand:x]` - A random number between 0 - x inclusive.
+      `[Hash:text]` - Returns an integral hash of text. [gamertag] substitution supported.
+      `[History:key]` - The value of the player history [key].
+      `[SysHistory:key]` - The value of the system history [key].
+      `[ClanHistory:key]` - The value of the clan history [key].
+      `[Block:x,y,z]` - The block id at x,y,z.
+      `[Aux:x,y,z]` - The aux data at x,y,z.
+      `[Light:x,y,z]` - The light at x,y,z.
+      `[SunLight:x,y,z]` - The sun light at x,y,z.
+      `[BlockLight:x,y,z]` - The block light at x,y,z.
+      `[Inv:[Item][x,y,z]]` - Inventory. If x,y,z is omitted, player inventory is used.
+      `[Distance:[x,y,z][x,y,z]]` - Get the distance between the two points.
+      `[GamerCount:all|local|remote]` - Get the number of gamers in the world.
+      `[GamerCount:[zone][all|local|remote]]` - Get the number of gamers in a zone.
+      `[GamerCount:[x,y,z][x,y,z][all|local|remote]]` - Get the number of gamers in a cubic area.
+      `[GamerCount:[x,y,z][radius][all|local|remote]]` - Get the number of gamers in a spherical area.
+      `[NpcCount:npctype]` - Get the number of NPCs in the world.
+      `[NpcCount:[zone][npctype]]` - Get the number of NPCs in a zone.
+      `[NpcCount:[x,y,z][x,y,z][npctype]]` - Get the number of NPCs in a cubic area.
+      `[NpcCount:[x,y,z][radius][npctype]]` - Get the number of NPCs in a spherical area.
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Wait
+    </Name>
+    <Description>
+      Wait: Pauses the script execution for a time.
+
+      Wait [millisecs]
+
+      `[millisecs]` - The number of milliseconds the script should wait.
+
+      Examples:
+
+      Wait [1000] = wait 1 second.
+      Wait [100] = wait 1/10th of a second.
+      Wait [10000] = wait 10 seconds.
+      Wait [60000] = wait 1 minute.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Waypoint
+    </Name>
+    <Description>
+      Waypoint: Manipulates the player waypoint. A player can have only one waypoint at a time.
+
+      Waypoint [x,z]
+      Waypoint [delete]
+
+      `[x,z]` - The surface coordinate to set the waypoint.
+
+      `[delete]` - Delete rather than set the waypoint.
+
+      Examples:
+
+      Waypoint [300,200]
+      Sets the players waypoint at surface location 300,200.
+
+      Waypoint [delete]
+      Deletes the players waypoint.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Zone
+    </Name>
+    <Description>
+      Zone: Manipulate zones.
+
+      Zone [name] [delete]
+      Zone [name] [temp] [x,y,z] [x,y,z] [edit=on|off] [pvp=on|off] [fly=on|off] [builder=player|clan|none] [npc=on|off] [cld=x] [speed=x] [gravity=x] [entry=script] [exit=script]
+
+      `[temp]` - Flag the zone as a temporary zone. Temp zones are not saved. Temp zones are attached to players, so if each player has a temp zone with the same name, they do not affect each other.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      If
+    </Name>
+    <Description>
+      If: Begins a conditional query.
+
+      Conditional queries are used to execute different commands in the script based on the result of the query.
+
+      Example:
+
+      if  query1
+      then  command1
+      else  command2
+      endif
+
+      The above script will execute command1 ONLY if query1 is true, otherwise it will execute ONLY command2. Only either command1 OR command2 are executed, not both.
+
+
+      if  query1
+      then  command1
+      elseif  query2
+      then  command2
+      else  command3
+      endif
+
+      The above script executes command1 if query1 is true, otherwise it executes command2 if query2 is true, otherwise it executes command3.
+
+      Note: endif is only needed to close the query block if the script contains further commands not related to the queries.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      CanEquip
+    </Name>
+    <Description>
+      CanEquip: Queries if the player who activated the script can use an item, based on the items skill requirement.
+
+      CanEquip [item] [true|false]
+
+      `[item]` - The item to query
+      `[true|false]` - The query. If this parameter is omitted, [true] is used.
+
+      Examples:
+
+      CanEquip [RubySword]
+      Returns true if the player has the required skill level to use a RubySword.
+
+      CanEquip [RubySword] [true]
+      Same as above.
+
+      CanEquip [RubySword] [false]
+      Returns true if the player does not have the required skill level to use a RubySword.
+
+      CanEquip [Marble]
+      Returns true if the player can place a marble block.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HasAction
+    </Name>
+    <Description>
+      HasAction: Queries if the player has performed an action.
+
+      HasAction [item] [action] [true|false]
+      HasAction [item] [action] [compare] [qty]
+
+      `[item]` - The name of the item to query.
+      `[action]` - The type of action to query. Valid actions are Mined, Used, Crafted, Collected.
+
+      Examples:
+
+      HasAction [WoodSword] [crafted]
+      Returns true if the player has crafted at least one WoodSword.
+
+      HasAction [WoodSword] [crafted] [&gt;] [10]
+      Returns true if the player has crafted more than 10 WoodSwords.
+
+      HasAction [Clay] [mined] [&gt;] [100]
+      Returns true if the player has mined more than 100 Clay.
+
+      HasAction [Limestone] [used] [&lt;] [50]
+      Returns true if the player has placed less than 50 Limestone.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HasHistory
+    </Name>
+    <Description>
+      HasHistory: Queries historical records.
+
+      HasHistory [name] [player|clan] [true|false]
+      HasHistory [name] [player|clan] [compare] [count]
+
+      `[player]` - Query player history.
+      `[clan]` - Query the players clan history.
+      Omit these to query system history.
+
+      Examples:
+
+      HasHistory [Sample]
+      HasHistory [Sample] [true]
+      Returns true if system Sample history is not equal to zero.
+
+      HasHistory [Sample] [false]
+      Returns true if there is no system Sample history or it equals zero.
+
+      HasHistory [Sample] [player]
+      HasHistory [Sample] [player] [true]
+      Returns true if the Sample history for the player is not equal to zero.
+
+      HasHistory [Sample] [clan]
+      HasHistory [Sample] [clan] [true]
+      Returns true if the Sample history for the players clan is not equal to zero.
+
+      HasHistory [Sample] [clan] [&gt;=] [10]
+      Returns true if the Sample history for the players clan is greater than or equal to 10.
+
+      HasHistory [Sample] [player] [&lt;=] [10]
+      Returns true if the Sample history for the player is less than or equal to 10.
+
+      HasHistory [Sample] [=] [10]
+      Returns true if the system Sample history equals 10.
+
+
+      System generated records:
+
+      BookRead\xxx
+      xxx = the books title. This player record is generated/incremented when you read a book.
+      example: HasHistory [BookRead\Golems Lore] [player] [true]
+
+      NPCTalk\xxx
+      xxx = Name of NPC. This player record is generated/incremented when you talk to an NPC
+      example: HasHistory [NPCTalk\John The Elf] [player] [&gt;] [4]
+
+      Note: History names support folders so you can use \ in your history names to create logical folders of history.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HasInventory
+    </Name>
+    <Description>
+      HasInventory: Queries block or entity inventories.
+
+      HasInventory [x,y,z] [item] [true|false]
+      HasInventory [player] [item] [true|false]
+      HasInventory [x,y,z] [item] [compare] [count]
+      HasInventory [player] [item] [compare] [count]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HasMarker
+    </Name>
+    <Description>
+      HasMarker: Queries map markers.
+
+      HasMarker [name] [true|false]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HasPermission
+    </Name>
+    <Description>
+      HasPermission: Queries player permissions.
+
+      HasPermission [permission] [true|false]
+
+      Valid permissions:
+      Adventure, Edit, Creative, Fly, Map, VoiceChat, TextChat, Spectate, Shops, ViewScripts, Grief, Save, Admin.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HasActor
+    </Name>
+    <Description>
+      HasActor: Queries actor properties.
+
+      HasActor [property] [compare] [level]
+
+      Examples:
+
+      HasActor [Health] [&gt;] [100]
+      Returns true if the actors current Health is greater than 100 points, otherwise returns false.
+
+      HasActor [Oxygen] [=] [25]
+      Returns true if the actors current Oxygen is equal to 25 points, otherwise returns false.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HasSkill
+    </Name>
+    <Description>
+      HasSkill: Queries player skill levels.
+
+      HasSkill [skill] [compare] [level]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      HasStatBonus
+    </Name>
+    <Description>
+      HasStatBonus: Queries player item stat bonuses.
+
+      HasStatBonus [skill] [compare] [count]
+
+      `[skill]` - Valid values are Health, Attack, Strength, Defence, Ranged, Looting.
+
+      Examples:
+
+      HasStatBonus [Defence] [&gt;=] [1000]
+      Returns true if the players defence stat bonus is greather than or equal to 1000, otherwise returns false.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Intersect
+    </Name>
+    <Description>
+      Intersect: Tests for an intersection with players, NPCs or both.
+
+      Intersect [sphere] [x,y,z] [radius] [player|npc] [display]
+      Intersect [ray|box] [x,y,z] [x,y,z] [player|npc] [display]
+      Intersect [frustum] [x,y,z] [x,y,z] [fov] [player|npc] [display]
+
+      `[sphere|ray|box|frustum]` - The shape used for the collision test. This parameter is mandatory and only one shape can be chosen per command.
+      `[player|npc]` - The type of character to test against, either players or NPCs. If this parameter is omitted, both players and NPCs will be tested against. The script player (the player who activated the script is not included in the test).
+      `[display]` - Add this to the end of the command and the game will draw a test wireframe for a few seconds so you can visually determine if it is what you intend. This option typically would only be used for debugging the command and would be removed once the command works as you intend.
+
+      Only the [ray] shape detects if a player or NPC is hidden by blocks.
+
+      Examples:
+
+      Intersect [sphere] [300,200,250] [50]
+      Returns true if a player or NPC intersects the sphere centered at position [300,200,250], radius 50. If multiple players or NPCs intersect the sphere, the player or NPC that is closest to the sphere center is returned.
+
+      Intersect [sphere] [prel:0,0,0] [30] [npc]
+      Returns true if a NPC intersects the sphere centered at the script players position, radius 30. If multiple NPCs intersect the sphere, the NPC that is closest to the sphere center is returned.
+
+      Intersect [ray] [vrel:0,0,0] [vrel:20,0,0] [player]
+      Returns true if a player intersects the ray that starts at the script players eye position with a direction of the script players view direction, up to 20 blocks distance. Players hiding behind blocks won't be detected. . If multiple players intersect the ray, the player that is closest to the ray origin is returned.
+
+      Intersect [frustum] [vrel:0,0,0] [vrel:30,0,0] [20] [npc]
+      Returns true if a NPC intersects the frustum relative to the players view direction. The frustum reaches 30 blocks from the player and has a field of view of 20 degrees. If multiple NPCs intersect the frustum, the NPC that is closest to the script players position is returned.
+
+      Intersect [box] [100,200,100] [300,250,300] [display]
+      Returns true if a player or NPC interects the box positioned at 100,200,100 to 300,250,300.  If multiple players or NPCs intersect the frustum, the player or NPC that is closest to the script players position is returned. The box is displayed on the screen for a few seconds.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsAvatar
+    </Name>
+    <Description>
+      IsAvatar: Queries what skin the player is currently wearing.
+
+      IsAvatar [avatar] [true|false]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsBlock
+    </Name>
+    <Description>
+      IsBlock: Queries the block id at a location.
+
+      IsBlock [x,y,z] [block] [aux] [true|false]
+
+      Examples:
+
+      IsBlock [150,200,300] [Basalt]
+      IsBlock [150,200,300] [Basalt] [true]
+      Returns true if the block at location 150,200,300 is Basalt.
+
+      IsBlock [150,200,300] [Basalt] [false]
+      Returns true if the block at location 150,200,300 is not Basalt.
+
+      IsBlock [150,200,300] [Ramp] [3]
+      IsBlock [150,200,300] [Ramp] [3] [true]
+      Returns true if the block at location 150,200,300 is a Ramp AND the associated Aux data equals 3.
+
+      IsBlock [150,200,300] [Ramp] [3] [false]
+      Returns true if the block at location 150,200,300 is not a Ramp OR the associated Aux data is not equal to 3.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsBlockEdited
+    </Name>
+    <Description>
+      IsBlockEdited: Queries if the block at a location has been edited.
+
+      IsBlockEdited [x,y,z] [true|false]
+
+      Examples:
+
+      IsBlockEdited [150,200,300]
+      IsBlockEdited [150,200,300] [true]
+      Returns true if the block at location 150,200,300 has been edited.
+
+      IsBlockEdited [150,200,300] [false]
+      Returns true if the block at location 150,200,300 has not been edited. i.e. it is still in it's naturally generated state.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsBlockLightSource
+    </Name>
+    <Description>
+      IsBlockLightSource: Queries if the block at a location is a light source (emits light).
+
+      IsBlockLightSource [x,y,z] [true|false]
+
+      Examples:
+
+      IsBlockLightSource [150,200,300]
+      IsBlockLightSource [150,200,300] [true]
+      Returns true if the block at location 150,200,300 is a light source.
+
+      IsBlockLightSource [150,200,300] [false]
+      Returns true if the block at location 150,200,300 is not a light source.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsBlockOpen
+    </Name>
+    <Description>
+      IsBlockOpen: Queries if the block at a location is being accessed by a player.
+
+      IsBlockOpen [x,y,z] [true|false]
+
+      Examples:
+
+      IsBlockOpen [150,200,300]
+      IsBlockOpen [150,200,300] [true]
+      Returns true if the block at location 150,200,300 is being accessed by a player.
+
+      IsBlockOpen [150,200,300] [false]
+      Returns true if the block at location 150,200,300 is not being accessed by a player.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsBlockOre
+    </Name>
+    <Description>
+      IsBlockOre: Queries if the block at a location is an ore block.
+
+      IsBlockOre [x,y,z] [true|false]
+
+      Examples:
+
+      IsBlockOre [150,200,300]
+      IsBlockOre [150,200,300] [true]
+      Returns true if the block at location 150,200,300 is an ore block.
+
+      IsBlockOre [150,200,300] [false]
+      Returns true if the block at location 150,200,300 is not an ore block.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsBlockPassable
+    </Name>
+    <Description>
+      IsBlockPassable: Queries if a player can pass through the block at a location.
+
+      IsBlockPassable [x,y,z] [true|false]
+
+      Examples:
+
+      IsBlockPassable [150,200,300]
+      IsBlockPassable [150,200,300] [true]
+      Returns true if the player can pass through the block at location 150,200,300.
+
+      IsBlockPassable [150,200,300] [false]
+      Returns true if the player can not pass through the block at location 150,200,300.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsBlockDeliveringPower
+    </Name>
+    <Description>
+      IsBlockDeliveringPower: Queries if a block is delivering power (to adjacent blocks).
+
+      IsBlockDeliveringPower [x,y,z] [true|false]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsBlockReceivingPower
+    </Name>
+    <Description>
+      IsBlockReceivingPower: Queries if a block is receiving power from an adjacent power emitting block.
+
+      IsBlockReceivingPower [x,y,z] [true|false]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsBlockResistance
+    </Name>
+    <Description>
+      IsBlockResistance: Queries a blocks resistance (hardness) at a location. A blocks resistance is based on its material and can be viewed when prospecting the block.
+
+      IsBlockResistance [x,y,z] [compare] [count]
+
+      Examples:
+
+      IsBlockResistance [150,200,300] [&gt;=] [1000]
+      Returns true if the block at location 150,200,300 has a resistance of 1000 or greater.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsBlockSolid
+    </Name>
+    <Description>
+      IsBlockSolid: Queries if the block at a location is a solid block (players cannot see through it or see through parts of it).
+
+      IsBlockSolid [x,y,z] [true|false]
+
+      Examples:
+
+      IsBlockSolid [150,200,300]
+      IsBlockSolid [150,200,300] [true]
+      Returns true if the block at location 150,200,300 is a solid block.
+
+      IsBlockSolid [150,200,300] [false]
+      Returns true if the block at location 150,200,300 is not a solid block. i.e. the player can see through it.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsBlockTexture
+    </Name>
+    <Description>
+      IsBlockTexture: Queries the block texture id at a location.
+
+      IsBlockTexture [x,y,z] [id] [true|false]
+      IsBlockTexture [x,y,z] [compare] [id]
+
+      `[id]` - The texture id is a zero based value. Possible values are 0 - 15. The first (default) texture id is 0. If you use this command on a block that does not support multiple textures, then the texture id will equal zero.
+
+      Examples:
+
+      IsBlockTexture [150,200,300] [0]
+      Returns true if the texture id for the block is 0 (default texture).
+
+      IsBlockTexture [150,200,300] [3]
+      IsBlockTexture [150,200,300] [3] [true]
+      Returns true if the texture id for the block is 3.
+
+      IsBlockTexture [150,200,300] [3] [false]
+      Returns true if the texture id for the block is not 3.
+
+      IsBlockTexture [150,200,300] [&gt;=] [3]
+      Returns true if the texture id for the block is greater than or equal to 3.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsClan
+    </Name>
+    <Description>
+      IsClan: Queries if the player is a member of a clan.
+
+      IsClan [name] [true|false]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsClock
+    </Name>
+    <Description>
+      IsClock: Queries the current game hour (24 hour clock).
+
+      IsClock [hour] [true|false]
+      IsClock [compare] [hour|history]
+
+      Examples:
+
+      IsClock [10]
+      IsClock [10] [true]
+      Returns true if it is between 10:00 and 10:59.
+
+      IsClock [10] [false]
+      Returns true if it is not between 10:00 and 10:59.
+
+      IsClock [=] [10]
+      Same as IsClock [10] [true].
+
+      IsClock [&gt;] [10]
+      Returns true if it is 11:00 or later.
+
+      IsClock [&lt;] [10]
+      Returns true if it is earlier than 10:00.
+
+      IsClock [&lt;] [syshistory:time]
+      Returns true if the clock (in hours) is less than the value stored in the system history record called time.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsCombat
+    </Name>
+    <Description>
+      IsCombat: Queries if combat is enabled.
+
+      IsCombat [true|false]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsDayTime
+    </Name>
+    <Description>
+      IsDayTime: Queries if it is currently day time.
+
+      IsDayTime [true|false]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsDistance
+    </Name>
+    <Description>
+      IsDistance: Queries the distance between the player and a location.
+
+      IsDistance [x,y,z] [compare] [distance]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsEquipped
+    </Name>
+    <Description>
+      IsEquipped: Queries if the player has the item equipped.
+
+      IsEquipped [left|right|body] [item] [true|false]
+
+      `[left|right|body]` - left hand, right hand, or body slot. Omit to use default. If body is used, the appropriate body slot is used for the query.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsFiniteResources
+    </Name>
+    <Description>
+      IsFiniteResources: Queries if Finite Resources is enabled.
+
+      IsFiniteResources [true|false]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsGamerCount
+    </Name>
+    <Description>
+      IsGamerCount: Queries the number of gamers in the session.
+
+      IsGamerCount [all|local|remote] [compare] [count]
+      IsGamerCount [zone] [all|local|remote] [compare] [count]
+      IsGamerCount [x,y,z] [radius] [all|local|remote] [compare] [count]
+      IsGamerCount [x,y,z] [x,y,z] [all|local|remote] [compare] [count]
+
+      `[all] is the total number of players in the session (local + remote).
+      `[local] is the number of players who are on the same xbox as the player who activated the script.
+      `[remote] is the number of players who are not on the same xbox as the player who activated the script.
+
+      Examples:
+
+      IsGamerCount [&gt;] [2]
+      Returns true if there are at least 3 gamers in the session.
+
+      IsGamerCount [local] [&gt;] [1]
+      Returns true if there are more than 1 local players (split screen).
+
+      IsGamerCount [remote] [&gt;] [0]
+      Returns true if there is at least 1 remote player (multiplayer).
+
+      IsGamerCount [township] [&gt;] [0]
+      Returns true if there is at least 1 player inside the township zone.
+
+      IsGamerCount [township] [remote] [&gt;] [0]
+      Returns true if there is at least 1 remote player inside the township zone.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsInZone
+    </Name>
+    <Description>
+      IsInZone: Queries if the player is in a zone.
+
+      IsInZone [Spawn|NoEdit|NoPvP|NoFly|NoMobs|NoEscape] [true|false]
+
+      Specify one or more types of zone types.
+
+      Examples:
+
+      IsInZone [NoEdit|NoPvP]
+      IsInZone [NoEdit|NoPvP] [true]
+      Returns true if the player is in a no edit and no pvp zone.
+
+      IsInZone [Spawn] [false]
+      Returns true if the player is not in a spawn zone.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsLight
+    </Name>
+    <Description>
+      IsLight: Queries the quantity of light at a location.
+
+      IsLight [x,y,z] [sun|moon|block] [compare] [count]
+
+      Examples:
+
+      IsLight [150,200,300] [&gt;] [5]
+      IsLight [150,200,300] [sun|moon|block] [&gt;] [5]
+      Returns true if location 150,200,300 has either a sun, moon or a light level greater than 5.
+
+      IsLight [100,200,300] [sun] [&lt;] [10]
+      Returns true if location 100,200,300 has a sunlight level of less than 10.
+
+      IsLight [100,200,300] [moon|block] [=] [12]
+      Returns true if location 100,200,300 has either moon light or block light that equals 12.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsLit
+    </Name>
+    <Description>
+      IsLit: Queries if a location is touched by light, either from itself or an adjacent location.
+
+      If [x,y,z] does not contains a solid block then IsLit is equivalent to IsLight [&gt;] [0], otherwise IsLit is equivalent to testing IsLight [&gt;] [0] for every adjacent location and returning true if at least one adjacent location contains light.
+
+      IsLit [x,y,z] [sun|moon|block] [true|false]
+
+      Examples:
+
+      IsLit [150,200,300]
+      IsLit [150,200,300] [true]
+      IsLit [150,200,300] [sun|moon|block] [true]
+      Returns true if the block at location 150,200,300 is lit by either the sun, moon or a light emitting block (including itself).
+
+      IsLit [100,200,300] [sun]
+      IsLit [100,200,300] [sun] [true]
+      Returns true if the block at 100,200,300 is lit by the sun.
+
+      IsLit [100,200,300] [sun|moon]
+      Returns true if the block at 100,200,300 is lit by the sun or the moon.
+
+      IsLit [100,200,300] [moon|block]
+      Returns true if the block at 100,200,300 is lit by the moon or another block (torch, sun box, lava etc).
+
+      IsLit [100,200,300] [moon|block] [false]
+      Returns true if the block at 100,200,300 is not lit by the moon or another block (torch, sun box, lava etc).
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsNpcCount
+    </Name>
+    <Description>
+      IsNpcCount: Queries the number of NPCs in an area.
+
+      IsNpcCount [npctype] [compare] [count]
+      IsNpcCount [zone] [npctype] [compare] [count]
+      IsNpcCount [x,y,z] [radius] [npctype] [compare] [count]
+      IsNpcCount [x,y,z] [x,y,z] [npctype] [compare] [count]
+
+      Examples:
+
+      IsNpcCount [&gt;] [2]
+      Returns true if there are at least 3 NPCs in the world.
+
+      IsNpcCount [zombie] [&gt;] [1]
+      Returns true if there are more than 1 zombies in the world.
+
+      IsNpcCount [township] [&gt;] [0]
+      Returns true if there is at least 1 remote player inside the township zone.
+
+      IsNpcCount [township] [&gt;] [0]
+      Returns true if there is at least 1 NPC inside the township zone.
+
+      IsNpcCount [township] [orc] [&gt;] [0]
+      Returns true if there is at least 1 orc inside the township zone.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsNameplate
+    </Name>
+    <Description>
+      IsNameplate: Queries the players nameplate setting.
+
+      IsNameplate [true|false|short|far]
+
+      Examples:
+
+      IsNameplate [short]
+      Returns true if the players nameplate is set to short.
+
+      IsNameplate
+      IsNameplate [true]
+      Both variants returns true if the players nameplate is on (either short or far).
+
+      IsNameplate [false]
+      Returns true if the players nameplate is turned off.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsNightTime
+    </Name>
+    <Description>
+      IsNightTime: Queries if it is currently night time.
+
+      IsNightTime [true|false]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsSkills
+    </Name>
+    <Description>
+      IsSkills: Queries if the skill system is enabled.
+
+      IsSkills [true|false]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsRandom
+    </Name>
+    <Description>
+      IsRandom: Allows a randomized conditional.
+
+      IsRandom [x,y]
+
+      `[x,y]` - X chances in Y.
+
+      Examples:
+
+      IsRandom [1,2]
+      Has 1 chance in 2 (50%) of returning true.
+
+      IsRandom [3,10]
+      Has 3 chances in 10 (30%) of returning true.
+
+      IsRandom [34,100]
+      Has 34 chances in 100 (34%) of returning true.
+
+      IsRandom [1,1000]
+      Has 1 chance in 1000 (0.1%) of returning true.
+
+      if  IsRandom [1,3]
+      then  Notify [Well done]
+      else  Notify [Bad Luck]
+
+      The following script will have a 1 in 3 chance of notifying [Well Done] otherwise it will notify [Bad Luck]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsTime
+    </Name>
+    <Description>
+      IsTime: Queries the current game or player time.
+
+      IsTime [compare] [seconds]
+      IsTime [player] [compare] [seconds]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      IsVar
+    </Name>
+    <Description>
+      IsVar: Queries the value of a variable.
+
+      IsVar [name] [compare] [value]
+
+      `[value]` - A numeric literal or another variable.
+
+      Examples:
+
+      IsVar [mana] [&gt;] [5.2]
+      Returns true if the value of the variable called 'mana' is greater than 5.2.
+
+      IsVar [focus] [=] [100]
+      Returns true if the value of the variable called 'focus' is equal to 100.
+
+      IsVar [profit] [&lt;] [loss]
+      Returns true if the value of the variable called 'profit' is less than the value of the variable called 'loss'.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Then
+    </Name>
+    <Description>
+      Then: Marks which commands are executed if the queries are true.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Elseif
+    </Name>
+    <Description>
+      Elseif: Allows multiple query branches.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Else
+    </Name>
+    <Description>
+      Else: Marks which commands are executed if the queries are false.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Endif
+    </Name>
+    <Description>
+      Endif: Ends an If, Then, Else, Elseif block.
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Global Scripts
+    </Name>
+    <Description>
+      Global Scripts:
+
+      Global scripts are scripts that are accessible to all of your worlds.
+      To make a script global, simply prefix it's name with 'Global\'
+      If you host a multiplayer world, your global scripts are accessible.
+      If you join a multiplayer world (not host), your global scripts are not accessible.
+      If you share a world, only the global scripts used in that world are included in the share.
+
+      Common Parameter Definitions:
+
+      All commands and parameters are case insensitive, with only a small number of exceptions. The exceptions are documented with the command documentation.
+
+      If you see multiple parameters defined, separated by a vertical bar (|), this means only one of the parameters should be used, it is your choice which. e.g. [on|off|toggle] means you can use either [on], [off] or [toggle], but only one. [true|false] means you can use either [true] or [false], but not both. Note
+
+    </Description>
+  </Script>
+  <Script>
+      <Name>
+        Text Substitution
+      </Name>
+    <Description>
+      Text Substitution:
+      `[text]`
+      Any text parameter supports text substitution. Text substitution is when certain key words surrounded by [square brackets] are substituted with a value.
+
+      `[gamertag]` - the players gamertag is substituted.
+      `[clan]` - the players clan name is substituted.
+      `[history:key]` - the value of the player history identified by key is substituted.
+      `[syshistory:key]` - the value of the system history identified by key is substituted.
+      `[clanhistory:key]` - the value of the players clan history identified by key is substituted.
+
+      e.g. If the players gamertag is 'Baldy' and the players clan is 'Dragons' and the player has a value of 5 for their 'rank' history, then the following text:
+
+      `[Hello [gamertag] of Clan [clan]. Your Rank is [history:rank]. Good luck!]
+      will be substituted as:
+      `[Hello Baldy of Clan Dragons. Your Rank is 5. Good luck!]
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Coordinates
+    </Name>
+    <Description>
+      Coordinates:
+      `[x,y,z]`
+      This parameter defines that a three dimensional coordinate is expected. This parameter has three components, separated by commas. Each component must be either a positive or negative whole number. Usually it is the coordinate (location) of a block in the world, but it can also be used to define relative coordinates, which are coordinates relative to another coordinate.
+
+      x: The x coordinate is for the west/east axis.
+      y: The y coordinate is for the up/down axis.
+      z: The z coordinate is for the north/south axis.
+
+      Relative coordinates are supported.
+      `[rel:x, y, z]
+
+      Example:
+      `[rel:-10, 5, 20]` - The final coordinate will be this coordinate + the coordinate of the script block that the script was executed from, otherwise if the script was run manually from the menu then it will be an absolute coordinate (+ [0,0,0].
+
+      If the script block is located at [30, 10, 40], then the final coordinate of [rel:-10, 5, 20] will be [20, 15, 60]
+
+      Player relative coordinates are supported.
+      `[prel:x, y, z]` - Relative to the players position.
+      `[vrel:f, y, r]` - Relative to the players viewpoint. f = forward, r = right.
+      `[hvrel:f, y, r]` - Relative to the players horizontal viewpoint (Up/down view direction is ignored). f = forward, r = right.
+
+      Example:
+      `[vrel: 10, 2, 3]` - 10 Blocks forward of the player + 2 blocks up + 3 blocks to the right.
+      `[vrel: -5, -2, -3]` - 5 Blocks behind the player + 2 blocks down + 3 blocks to the left.
+
+      Cursor relative coordinates are supported.
+      `[crel:x, y, z]` - Relative to the block the player is looking at (with highlight frame).
+
+      Target and Killer relative coordinates are supported.
+      `[trel:x, y, z]` - Relative to the targets position.
+      `[tvrel:f, y, r]` - Relative to the targets viewpoint.
+      `[krel:x, y, z]` - Relative to the killers position.
+      `[kvrel:f, y, r]` - Relative to the killers viewpoint.
+
+      *Note Killer relative coords are only valid when the script is executed via the PlayerDeath event.
+
+
+      2D Coordinates (Surface coordinates):
+
+      `[x,z]
+      This parameter defines that a two dimensional coordinate is expected. This parameter has two components, separated by commas. Each component must be either a positive or negative whole number. Usually it is the coordinate (location) of a block on the world surface. With these coordinates, the y component not required and usually the surface height at x,z is used instead.
+
+      x: The x coordinate is for the west/east axis.
+      z: The z coordinate is for the north/south axis.
+
+      Relative coordinates are supported.
+
+
+    </Description>
+  </Script>
+  <Script>
+    <Name>
+      Other
+    </Name>
+    <Description>
+
+      `[block]`
+      This parameter defines that the name of a block is expected.
+
+      `[item]`
+      This parameter defines that the name of an item is expected. In most cases, block names are also valid.
+
+      `[compare]`
+      This parameter specifies that a comparison operator is expected. Valid comparison operators are:
+      `[=]` - Equal To
+      `[!=]` - Not Equal To
+      `[&lt;&gt;]` - Not Equal To
+      `[&gt;]` - Greater Than
+      `[&gt;=]` - Greater Than or Equal To
+      `[&lt;]` - Less Than
+      `[&lt;=]` - Less Than or Equal To
+      `[mod]` - Modulus
+
+      `[qty|count]`
+      This parameter specifies that a numerical quantity is expected.
+
+      `[count|history]`
+      This parameter specifies that a numerical quantity is expected. History values can also be used.
+      e.g.
+      `[5]` specifies the fixed number 5.
+      `[history:key]` - the value of the player history identified by key is used.
+      `[syshistory:key]` - the value of the system history identified by key is used.
+      `[clanhistory:key]` - the value of the players clan history identified by key is used.
+
+
+      Fixed Value Parameter Definitions:
+
+      Fixed value parameters are not substituted with a user defined value, their value is always the same, and they specify a certain action or target for the script command.
+
+      `[player]`
+      This parameter specifies that the command is targeted at the player who activated the script.
+
+      `[clan]`
+      This parameter specifies that the command is targeted at all clan members of the player who activated the script.
+
+      `[admin]`
+      This parameter specifies that the command is targeted at all admins.
+
+      `[delete]`
+      This parameter specifies that the data the command is targeting is to be deleted.
+
+      `[true|false]`
+      `[on|off|toggle]`
+
+      `[n|s|e|w]`
+      This parameter specifies a direction. n = north, s = south, e = east, w = west.
+    </Description>
+  </Script>
+</ArrayOfScript>

@@ -1,0 +1,3 @@
+﻿token=
+prefix=?
+activity=Total Miner
