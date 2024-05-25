@@ -11,7 +11,7 @@ namespace ForgeBot.Tools
         public static List<User> Users = new();
         public Permissions()
         {
-            Users.Add(new User(269626330755104769, Permission.OP));
+            Users.Add(new User(269626330755104769, Permission.SUDO));
         }
 
         [System.Serializable]
@@ -28,7 +28,7 @@ namespace ForgeBot.Tools
         }
         public enum Permission
         {
-            OP = -1,
+            SUDO = -1,
             Developer = 0,
             Admin = 1,
             Reserved = 2,

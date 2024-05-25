@@ -7,14 +7,11 @@ using System.Threading.Tasks;
 using StudioForge.TotalMiner;
 using ForgeBot.Tools;
 using ForgeBot.Converters;
-using ForgeBot.Constants;
 using DSharpPlus.Entities;
 using FuzzySharp;
 using FuzzySharp.SimilarityRatio;
 using FuzzySharp.SimilarityRatio.Scorer.StrategySensitive;
 using FuzzySharp.Extractor;
-using FuzzySharp.PreProcess;
-using StudioForge.TotalMiner.API;
 
 namespace ForgeBot.Commands
 {

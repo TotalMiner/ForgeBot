@@ -7,6 +7,7 @@ namespace ForgeBot.Converters
 {
     public static class ItemColor
     {
+        // WARNING THIS IS REALLY UGLY
         static public DiscordColor GetItemColor(string itemID)
         {
             if (itemID.Contains("greenstone") || itemID.Contains("green"))

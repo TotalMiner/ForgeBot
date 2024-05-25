@@ -6,6 +6,7 @@ namespace ForgeBot.Converters
 {
     public static class ItemEmote
     {
+        // I'm going to remove this and go a different route
         public static string GetEmote(string itemID)
         {
             return itemID.ToLower() switch
