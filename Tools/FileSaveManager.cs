@@ -7,6 +7,11 @@ namespace ForgeBot.Tools
     {
         public static void SaveFile(string address, object saveData)
         {
+            string directory = Path.GetDirectoryName(address);
+
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
             FileStream file = File.Create(address);
             JsonSerializer.Serialize(file, saveData);
             file.Close();
