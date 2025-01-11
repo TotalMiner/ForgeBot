@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using System.Xml.Serialization;
-using static ForgeBot.Tools.ScriptCommand;
 
 namespace ForgeBot.Tools
 {

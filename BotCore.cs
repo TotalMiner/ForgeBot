@@ -1,17 +1,12 @@
 ﻿using DSharpPlus;
-using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
 using ForgeBot.Commands;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using DSharpPlus.SlashCommands;
-using static ForgeBot.Tools.ScriptCommand;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using DSharpPlus.EventArgs;
 using System.Diagnostics;
 
