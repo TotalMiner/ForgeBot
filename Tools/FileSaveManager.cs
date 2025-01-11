@@ -11,5 +11,17 @@ namespace ForgeBot.Tools
             JsonSerializer.Serialize(file, saveData);
             file.Close();
         }
+        public static T LoadFile<T>(string address)
+        {
+            if (!File.Exists(address))
+            {
+                throw new FileNotFoundException($"File not found at {address}");
+            }
+
+            FileStream file = File.OpenRead(address);
+            var loadedResources = JsonSerializer.Deserialize<T>(file);
+            file.Close();
+            return loadedResources;
+        }
     }
 }
