@@ -32,7 +32,7 @@ namespace ForgeBot.Tools
             SUDO = -1,
             Developer = 0,
             Admin = 1,
-            Reserved = 2,
+            BugTracker = 2,
             Editor = 3,
             Unused = 4,
             User = 9
