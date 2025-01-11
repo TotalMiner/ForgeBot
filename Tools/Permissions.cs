@@ -1,4 +1,5 @@
 ﻿using DSharpPlus.SlashCommands;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,7 +10,12 @@ namespace ForgeBot.Tools
         public static Dictionary<ulong, Permission> Users = new();
         public Permissions()
         {
-            Users.Add(269626330755104769, Permission.SUDO);
+            Console.WriteLine("### Loading Operators");
+            Users = FileSaveManager.LoadFile<Dictionary<ulong, Permission>>("users/userops.json");
+            foreach (var user in Users)
+            {
+                Console.WriteLine($"$$$ OP : {user.Key} | LEVEL : {(Permission)user.Value}");
+            }
         }
 
         static public Permission GetUserLevel(ulong id, Permission fallback = Permission.User)

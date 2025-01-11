@@ -42,6 +42,7 @@ namespace ForgeBot
             GameItem.DeserializeItemData();
             Console.WriteLine("### Loading Script Data");
             ScriptCommand.DeserializeScriptCommands();
+            _ = new Permissions();
             BotCore.MainAsync(token, prefix, activity).GetAwaiter().GetResult();
         }
         static void OnProcessExit(object sender, EventArgs e)
