@@ -9,14 +9,24 @@ using System.Threading.Tasks;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.EventArgs;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace ForgeBot
 {
+        public enum ResponseKey
+        {
+            OneDriveError,
+        }
     public static class BotCore
     {
         public static Stopwatch WakeTime = new Stopwatch();
         public static bool IsVerbose = false;
         public static DiscordChannel DebugChannel;
+        public static Dictionary<ResponseKey, bool> AllowResponse = new()
+        {
+            { ResponseKey.OneDriveError, true }
+        };
+
         private static DiscordClient discord;
         private static bool HasStarted = false;
 
@@ -69,6 +79,7 @@ If you prefer to avoid OneDrive altogether, you can move your save location:
             Console.WriteLine(discord.Intents.ToString());
 
             slashCommands.RegisterCommands<SlashGeneral>();
+            slashCommands.RegisterCommands<AdminCommands>();
 #if DEBUG
             await discord.ConnectAsync(new DiscordActivity(activity, ActivityType.Competing));
 #else
@@ -82,7 +93,7 @@ If you prefer to avoid OneDrive altogether, you can move your save location:
         private static async Task MessageCreatedOverride(DiscordClient sender, MessageCreateEventArgs args)
         {
             Console.WriteLine($"Message received: {args.Message}");
-            if (args.Message.Content.Contains("System.IO.IOException", StringComparison.OrdinalIgnoreCase))
+            if (args.Message.Content.Contains("System.IO.IOException", StringComparison.OrdinalIgnoreCase) && AllowResponse[ResponseKey.OneDriveError])
             {
                 await args.Message.RespondAsync(OneDriveError);
             }

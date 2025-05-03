@@ -1,4 +1,6 @@
-﻿using DSharpPlus.SlashCommands;
+﻿using DSharpPlus.Entities;
+using DSharpPlus;
+using DSharpPlus.SlashCommands;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -61,7 +63,12 @@ namespace ForgeBot.Tools
             {
                 if (GetUserLevel(context.User.Id) <= RequiredPermission)
                     return true;
+                await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+    new DiscordInteractionResponseBuilder()
+        .WithContent($"❌ You do not have ForgeBot {RequiredPermission} or higher.")
+        .AsEphemeral(true));
                 return false;
+
             }
         }
     }
