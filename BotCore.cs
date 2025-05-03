@@ -19,13 +19,40 @@ namespace ForgeBot
         public static DiscordChannel DebugChannel;
         private static DiscordClient discord;
         private static bool HasStarted = false;
+
+        private static readonly string OneDriveError = @"## My game crashes on startup!!!
+
+If your **Total Miner** game crashes on startup or when saving, it may be due to your save folder being located in **OneDrive**, which can restrict the game's access to necessary files. This can happen if your Documents folder is synced to OneDrive by default.
+
+### Solution 1: Give Total Miner Access to OneDrive
+If you want to keep your saves in OneDrive, you'll need to ensure the game has the right permissions:
+
+**Manually Grant Permission to Total Miner:**
+   - Navigate to your **OneDrive folder** where `TotalMiner` is located. Typically `OneDrive/Documents/My Games/TotalMiner`.
+   - Right-click the `TotalMiner` folder → Select **Properties**.
+   - Go to the **Security** tab → Click **Edit**.
+   - Find your **user account** and ensure it has **Full Control**.
+   - Click **Apply** and **OK** to save changes.
+
+### Solution 2: Change the Save Location in the Launcher
+If you prefer to avoid OneDrive altogether, you can move your save location:
+
+1. **Open the Total Miner Launcher**.
+2. Click on **Settings**.
+3. Look for the **Save Folder Location** option.
+4. Change it to a different location outside of OneDrive, such as:
+   - `C:\Users\YourName\Documents\TotalMiner`
+   - `D:\TotalMinerSaves` (if you have a second drive)
+5. Launch the game.";
+
+
         public static async Task MainAsync(string token, string prefix, string activity)
         {
             discord = new DiscordClient(new DiscordConfiguration()
             {
                 Token = token,
                 TokenType = TokenType.Bot,
-                Intents = DiscordIntents.AllUnprivileged
+                Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
             });
 
             discord.Heartbeated += DiscordReady;
@@ -37,6 +64,10 @@ namespace ForgeBot
                 PollBehaviour = PollBehaviour.KeepEmojis
             });
 
+            discord.MessageCreated += MessageCreatedOverride;
+
+            Console.WriteLine(discord.Intents.ToString());
+
             slashCommands.RegisterCommands<SlashGeneral>();
 #if DEBUG
             await discord.ConnectAsync(new DiscordActivity(activity, ActivityType.Competing));
@@ -44,7 +75,17 @@ namespace ForgeBot
             await discord.ConnectAsync(new DiscordActivity(activity));
 #endif
 
+
             await Task.Delay(-1);
+        }
+
+        private static async Task MessageCreatedOverride(DiscordClient sender, MessageCreateEventArgs args)
+        {
+            Console.WriteLine($"Message received: {args.Message}");
+            if (args.Message.Content.Contains("System.IO.IOException", StringComparison.OrdinalIgnoreCase))
+            {
+                await args.Message.RespondAsync(OneDriveError);
+            }
         }
 
         public static async Task ClosingClient()
