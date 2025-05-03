@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text.Json;
 
 namespace ForgeBot.Tools
@@ -18,15 +19,20 @@ namespace ForgeBot.Tools
         }
         public static T LoadFile<T>(string address)
         {
-            if (!File.Exists(address))
-            {
-                throw new FileNotFoundException($"File not found at {address}");
-            }
+            string directoryPath = Path.GetDirectoryName(address);
+            if (!Directory.Exists(directoryPath))
+                Directory.CreateDirectory(directoryPath);
 
-            FileStream file = File.OpenRead(address);
-            var loadedResources = JsonSerializer.Deserialize<T>(file);
-            file.Close();
-            return loadedResources;
+            if (!File.Exists(address))
+                File.WriteAllText(address, "{}");
+            else if (string.IsNullOrEmpty(File.ReadAllText(address)))
+                File.WriteAllText(address, "{}");
+
+            using (FileStream file = File.OpenRead(address))
+            {
+                var loadedResources = JsonSerializer.Deserialize<T>(file);
+                return loadedResources ?? Activator.CreateInstance<T>();
+            }
         }
     }
 }
