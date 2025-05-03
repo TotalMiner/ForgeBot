@@ -92,7 +92,6 @@ If you prefer to avoid OneDrive altogether, you can move your save location:
 
         private static async Task MessageCreatedOverride(DiscordClient sender, MessageCreateEventArgs args)
         {
-            Console.WriteLine($"Message received: {args.Message}");
             if (args.Message.Content.Contains("System.IO.IOException", StringComparison.OrdinalIgnoreCase) && AllowResponse[ResponseKey.OneDriveError])
             {
                 await args.Message.RespondAsync(OneDriveError);
