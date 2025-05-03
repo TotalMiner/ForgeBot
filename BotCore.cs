@@ -65,6 +65,7 @@ If you prefer to avoid OneDrive altogether, you can move your save location:
                 Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
             });
 
+            if (IsVerbose)
             discord.Heartbeated += DiscordReady;
 
             var slashCommands = discord.UseSlashCommands();
