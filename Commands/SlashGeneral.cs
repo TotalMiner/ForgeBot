@@ -11,6 +11,8 @@ using FuzzySharp.SimilarityRatio.Scorer.StrategySensitive;
 using StudioForge.TotalMiner;
 using System;
 using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ForgeBot.Commands
@@ -22,6 +24,21 @@ namespace ForgeBot.Commands
         public async Task ItCanDrift(InteractionContext ctx)
         {
             await ctx.CreateResponseAsync(":race_car: vrmmmvrmmmmmmm-skrrrrrrrrrrrrrrrrrrr-vrmmmmmmmmmmm");
+        }
+
+        [SlashCommand("cat", "Get a random cat picture")]
+        public async Task CatAsync(InteractionContext ctx)
+        {
+            using HttpClient client = new();
+            var response = await client.GetStringAsync("https://api.thecatapi.com/v1/images/search");
+            using JsonDocument data = JsonDocument.Parse(response);
+            var imageUrl = data.RootElement[0].GetProperty("url").GetString();
+
+            await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                .AddEmbed(new DiscordEmbedBuilder()
+                    .WithTitle("🐱 Random Cat")
+                    .WithImageUrl(imageUrl)
+                    .WithColor(DiscordColor.Orange)));
         }
 #if DEBUG
         [SlashCommand("testtest", "TestCommand, Debug Only")]
