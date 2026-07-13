@@ -23,9 +23,10 @@ Local assembly references required for game API integration (located in `libs/`)
 
 ### Resource Dependencies
 Data files required at runtime for bot functionality:
-- `Resources/BlueprintData.xml`
-- `Resources/ItemData.xml`
-- `Resources/ScriptCommands.xml`
+*Items marked !! will download the latest version from the official [ForgeBot-Resources repository](https://github.com/TotalMiner/ForgeBot-Resources)*
+- !!`Resources/BlueprintData.xml`
+- !!`Resources/ItemData.xml`
+- !!`Resources/ScriptCommands.xml`
 - `Resources/properties.txt`
 
 ## Getting Started
