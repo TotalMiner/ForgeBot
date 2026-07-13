@@ -13,12 +13,12 @@ namespace ForgeBot.Tools
         #region GameItem
         public static void DeserializeItemData()
         {
-            XmlRootAttribute itemRoot = new XmlRootAttribute
+            XmlRootAttribute itemRoot = new()
             {
                 ElementName = "ArrayOfItemDataXML",
                 IsNullable = true
             };
-            XmlSerializer itemXmlSerializer = new XmlSerializer(typeof(ItemDataXML[]), itemRoot);
+            XmlSerializer itemXmlSerializer = new(typeof(ItemDataXML[]), itemRoot);
             TextReader itemTextReader = new StreamReader("Resources/ItemData.xml");
             GameItem.itemDatas = (ItemDataXML[])itemXmlSerializer.Deserialize(itemTextReader);
             itemTextReader.Close();
@@ -26,7 +26,9 @@ namespace ForgeBot.Tools
             foreach (ItemDataXML itemData in itemDatas)
             {
                 if (BotCore.IsVerbose)
+                {
                     Console.WriteLine($"*** Item : [{itemData.IDString}]");
+                }
             }
 
             //XmlRootAttribute blueprintRoot = new XmlRootAttribute

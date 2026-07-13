@@ -1,13 +1,9 @@
-﻿using DSharpPlus.Entities;
-using DSharpPlus;
+﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using ForgeBot.Tools;
 using System.Threading.Tasks;
 using static ForgeBot.Tools.Permissions;
-using ForgeBot.Tools;
 
 namespace ForgeBot.Commands
 {
@@ -17,8 +13,8 @@ namespace ForgeBot.Commands
         [SlashCommand("setresponse", "Enable or disable auto responses by key name")]
         [UserPermissionLevel(Permission.Admin)]
         public async Task SetResponseAsync(InteractionContext ctx,
-    [Option("key", "Name of the response key (case-sensitive)")] ResponseKey key,
-    [Option("enabled", "True to enable, false to disable")] bool enabled)
+            [Option("key", "Name of the response key (case-sensitive)")] ResponseKey key,
+            [Option("enabled", "True to enable, false to disable")] bool enabled)
         {
             if (!BotCore.AllowResponse.ContainsKey(key))
             {
@@ -36,6 +32,7 @@ namespace ForgeBot.Commands
                     .WithContent($"✅ Key `{key}` is now set to `{enabled}`.")
                     .AsEphemeral(true));
         }
+
         [SlashCommand("setperm", "Sets a user's permission level (Admin-only or higher)")]
         [UserPermissionLevel(Permission.Admin)]
         public async Task SetPermissionAsync(
@@ -47,17 +44,16 @@ namespace ForgeBot.Commands
             var targetLevel = GetUserLevel(targetUser.Id);
             if (ctx.User == targetUser)
             {
-                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-    new DiscordInteractionResponseBuilder()
-        .WithContent($"❌ You cannot assign permission to yourself.")
-        .AsEphemeral(true));
+                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                .WithContent($"❌ You cannot assign permission to yourself.")
+                .AsEphemeral(true));
             }
+
             if (callerLevel > targetLevel)
             {
-                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-    new DiscordInteractionResponseBuilder()
-        .WithContent($"❌ You cannot assign permission level **{newLevel}**, to {targetUser.Username} (**{targetLevel}**) which is higher than your own (**{callerLevel}**).")
-        .AsEphemeral(true));
+                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                .WithContent($"❌ You cannot assign permission level **{newLevel}**, to {targetUser.Username} (**{targetLevel}**) which is higher than your own (**{callerLevel}**).")
+                .AsEphemeral(true));
             }
             else if (newLevel > callerLevel)
             {

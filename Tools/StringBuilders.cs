@@ -4,7 +4,7 @@
     {
         public static string GetItemIconLink(string itemID)
         {
-            string imagelink = $"https://synhayden.com/download/totalminer/imgs/{itemID}128x";
+            string imagelink = $"{BotCore.ImagePath}/{itemID}";
             switch (itemID)
             {
                 default:

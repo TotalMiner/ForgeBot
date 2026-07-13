@@ -1,43 +1,83 @@
 ﻿using DSharpPlus.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ForgeBot.Converters
 {
     public static class ItemColor
     {
-        // WARNING THIS IS REALLY UGLY
+        private static readonly Dictionary<string, DiscordColor> ColorKeywords;
+
+        static ItemColor()
+        {
+            ColorKeywords = new Dictionary<string, DiscordColor>
+            {
+                { "greenstone", DiscordColor.PhthaloGreen },
+                { "green", DiscordColor.PhthaloGreen },
+                { "tan", DiscordColor.Wheat },
+                { "creme", DiscordColor.Wheat },
+                { "sledge", DiscordColor.Wheat },
+                { "flour", DiscordColor.Wheat },
+                { "dough", DiscordColor.Wheat },
+                { "butter", DiscordColor.Wheat },
+                { "wheat", DiscordColor.Wheat },
+                { "seed", DiscordColor.Wheat },
+                { "lime", DiscordColor.SpringGreen },
+                { "iron", DiscordColor.VeryDarkGray },
+                { "gray", DiscordColor.VeryDarkGray },
+                { "wood", DiscordColor.Brown },
+                { "bronze", DiscordColor.Brown },
+                { "leather", DiscordColor.Brown },
+                { "brown", DiscordColor.Brown },
+                { "steel", DiscordColor.White },
+                { "snow", DiscordColor.White },
+                { "cloud", DiscordColor.White },
+                { "troll", DiscordColor.White },
+                { "tile", DiscordColor.White },
+                { "white", DiscordColor.White },
+                { "milk", DiscordColor.White },
+                { "egg", DiscordColor.White },
+                { "salt", DiscordColor.White },
+                { "sugar", DiscordColor.White },
+                { "ruby", DiscordColor.Sienna },
+                { "red", DiscordColor.Sienna },
+                { "tomato", DiscordColor.Sienna },
+                { "apple", DiscordColor.Sienna },
+                { "boom", DiscordColor.DarkButNotBlack },
+                { "cherries", DiscordColor.Sienna },
+                { "strawberries", DiscordColor.Sienna },
+                { "titanium", DiscordColor.DarkButNotBlack },
+                { "black", DiscordColor.DarkButNotBlack },
+                { "spider", DiscordColor.DarkButNotBlack },
+                { "blue", DiscordColor.Blue },
+                { "rawfish", DiscordColor.Blue },
+                { "pink", DiscordColor.HotPink },
+                { "cherry", DiscordColor.HotPink },
+                { "raw", DiscordColor.HotPink },
+                { "cyan", DiscordColor.Cyan },
+                { "diamantium", DiscordColor.Cyan },
+                { "water", DiscordColor.Cyan },
+                { "orange", DiscordColor.Orange },
+                { "cooked", DiscordColor.Orange },
+                { "potion", DiscordColor.MidnightBlue },
+                { "obsidian", DiscordColor.Purple },
+                { "purple", DiscordColor.Purple },
+                { "staff", DiscordColor.Purple },
+                { "gold", DiscordColor.Gold },
+                { "key", DiscordColor.Gold },
+                { "yellow", DiscordColor.Gold },
+                { "lemon", DiscordColor.Gold },
+                { "corn", DiscordColor.Gold },
+                { "banana", DiscordColor.Gold },
+                { "grapefruit", DiscordColor.Gold }
+            };
+        }
+
         static public DiscordColor GetItemColor(string itemID)
         {
-            if (itemID.Contains("greenstone") || itemID.Contains("green"))
-                return DiscordColor.PhthaloGreen;
-            if (itemID.Contains("tan") || itemID.Contains("creme") || itemID.Contains("sledge") || itemID.Contains("flour") || itemID.Contains("dough") || itemID.Contains("butter") || itemID.Contains("wheat") || itemID.Contains("seed"))
-                return DiscordColor.Wheat;
-            if (itemID.Contains("lime"))
-                return DiscordColor.SpringGreen;
-            if (itemID.Contains("iron") || itemID.Contains("gray"))
-                return DiscordColor.VeryDarkGray;
-            if (itemID.Contains("wood") || itemID.Contains("bronze") || itemID.Contains("leather") || itemID.Contains("brown"))
-                return DiscordColor.Brown;
-            if (itemID.Contains("steel") || itemID.Contains("snow") || itemID.Contains("cloud") || itemID.Contains("troll") || itemID.Contains("tile") || itemID.Contains("white") || itemID.Contains("milk") || itemID.Contains("egg") || itemID.Contains("salt") || itemID.Contains("sugar"))
-                return DiscordColor.White;
-            if (itemID.Contains("ruby") || itemID.Contains("red") || itemID.Contains("tomato") || itemID.Contains("apple") || itemID.Contains("boom") || itemID.Contains("cherries") || itemID.Contains("strawberries"))
-                return DiscordColor.Sienna;
-            if (itemID.Contains("titanium") || itemID.Contains("black") || itemID.Contains("boom") || itemID.Contains("spider"))
-                return DiscordColor.DarkButNotBlack;
-            if (itemID.Contains("blue") || itemID.Contains("rawfish"))
-                return DiscordColor.Blue;
-            if (itemID.Contains("pink") || itemID.Contains("cherry") || itemID.Contains("raw"))
-                return DiscordColor.HotPink;
-            if (itemID.Contains("cyan") || itemID.Contains("diamantium") || itemID.Contains("water"))
-                return DiscordColor.Cyan;
-            if (itemID.Contains("orange") || itemID.Contains("cooked"))
-                return DiscordColor.Orange;
-            if (itemID.Contains("potion"))
-                return DiscordColor.MidnightBlue;
-            if (itemID.Contains("obsidian") || itemID.Contains("purple") || itemID.Contains("staff"))
-                return DiscordColor.Purple;
-            if (itemID.Contains("gold") || itemID.Contains("key") || itemID.Contains("yellow") || itemID.Contains("lemon") || itemID.Contains("corn") || itemID.Contains("banana") || itemID.Contains("grapefruit"))
-                return DiscordColor.Gold;
-            return DiscordColor.Azure;
+            KeyValuePair<string, DiscordColor> match = ColorKeywords.FirstOrDefault(pair => itemID.Contains(pair.Key));
+
+            return match.Key != null ? match.Value : DiscordColor.Azure;
         }
     }
 }

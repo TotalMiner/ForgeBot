@@ -1,27 +1,34 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.SlashCommands;
 using ForgeBot.Commands;
 using System;
-using System.Threading.Tasks;
-using DSharpPlus.SlashCommands;
-using DSharpPlus.EventArgs;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace ForgeBot
 {
-        public enum ResponseKey
-        {
-            OneDriveError,
-        }
+    public enum ResponseKey
+    {
+        OneDriveError,
+    }
     public static class BotCore
     {
         public static Stopwatch WakeTime = new Stopwatch();
         public static bool IsVerbose = false;
         public static DiscordChannel DebugChannel;
+        public static string ImagePath;
+        public static string ItemDataPath;
+        public static string BlueprintDataPath;
+        public static string ScriptsDataPath;
+        public static ulong DebugChannelId = 0;        
+        public static ulong DebugGuildId = 0; // possibly unneeded, but keeping it for now
+
         public static Dictionary<ResponseKey, bool> AllowResponse = new()
         {
             { ResponseKey.OneDriveError, true }
@@ -66,7 +73,9 @@ If you prefer to avoid OneDrive altogether, you can move your save location:
             });
 
             if (IsVerbose)
-            discord.Heartbeated += DiscordReady;
+            {
+                discord.Ready += DiscordReady;
+            }
 
             var slashCommands = discord.UseSlashCommands();
 
@@ -81,18 +90,19 @@ If you prefer to avoid OneDrive altogether, you can move your save location:
 
             slashCommands.RegisterCommands<SlashGeneral>();
             slashCommands.RegisterCommands<AdminCommands>();
-#if DEBUG
-            await discord.ConnectAsync(new DiscordActivity(activity, ActivityType.Competing));
-#else
-            await discord.ConnectAsync(new DiscordActivity(activity));
-#endif
 
+            await discord.ConnectAsync(new DiscordActivity(activity));
 
             await Task.Delay(-1);
         }
 
         private static async Task MessageCreatedOverride(DiscordClient sender, MessageCreateEventArgs args)
         {
+            if (args.Author.IsBot)
+            {
+                return;
+            }
+
             if (args.Message.Content.Contains("System.IO.IOException", StringComparison.OrdinalIgnoreCase) && AllowResponse[ResponseKey.OneDriveError])
             {
                 await args.Message.RespondAsync(OneDriveError);
@@ -101,52 +111,54 @@ If you prefer to avoid OneDrive altogether, you can move your save location:
 
         public static async Task ClosingClient()
         {
-            await discord.UpdateStatusAsync(new("Shutting Down"), UserStatus.DoNotDisturb);
-            DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
-            if (HasStarted)
+            if (discord == null) return;
+
+            if (HasStarted && DebugChannel != null)
             {
-                embedBuilder.WithTitle($":x:  Shutting Down");
-                embedBuilder.WithDescription("Application Offline");
-                embedBuilder.WithColor(DiscordColor.Red);
+                DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder()
+                .WithTitle($":x:  Shutting Down")
+                .WithDescription("Application Offline")
+                .WithColor(DiscordColor.Red);
 
                 await discord.SendMessageAsync(DebugChannel, embedBuilder);
             }
+
+            await discord.UpdateStatusAsync(new("Shutting Down"), UserStatus.DoNotDisturb); 
+            
+            await discord.DisconnectAsync();
+            discord.Dispose();
         }
-            private static async Task DiscordReady(DiscordClient sender, HeartbeatEventArgs args)
+
+        private static async Task DiscordReady(DiscordClient sender, ReadyEventArgs args)
         {
+            if (HasStarted) return;
 
-            DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
+            DebugChannel = await discord.GetChannelAsync(DebugChannelId);
 
-            if (!HasStarted)
+            DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder()
+                .WithTitle($":white_check_mark:  Startup")
+                .WithDescription("Application Online")
+                .AddField("Startup Time", $"{WakeTime.ElapsedMilliseconds}ms", false)
+                .AddField("Ping", $"{sender.Ping}ms", false)
+                .WithColor(DiscordColor.Green);
+
+            if (IsVerbose)
             {
-                DebugChannel = discord.GetGuildAsync(284460570948665354).Result.GetChannel(284460570948665354);
-                embedBuilder.WithTitle($":white_check_mark:  Startup");
-                embedBuilder.WithDescription("Application Online");
-                embedBuilder.AddField("Startup Time", $"{WakeTime.ElapsedMilliseconds}ms", false);
-                embedBuilder.AddField("Ping", $"{args.Ping}", false);
-                if (IsVerbose)
-                    embedBuilder.AddField("`-v`", IsVerbose.ToString(), false);
-                embedBuilder.WithColor(DiscordColor.Green);
-                HasStarted = true;
+                embedBuilder.AddField("`-v`", IsVerbose.ToString(), false);
             }
-            else
-            {
-                TimeSpan timeSpan = WakeTime.Elapsed;
-                string elapsedTime = System.String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-            timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds,
-            timeSpan.Milliseconds / 10);
-                DebugChannel = discord.GetGuildAsync(284460570948665354).Result.GetChannel(284460570948665354);
-                embedBuilder.WithTitle($":heart:  Heartbeat");
-                embedBuilder.WithDescription("Heartbeat Recorded\nApplication Reconnected");
-                embedBuilder.AddField("Last Heartbeat", $"{elapsedTime}", false);
-                embedBuilder.AddField("Ping", $"{args.Ping}", false);
-                embedBuilder.WithColor(DiscordColor.Goldenrod);
-                HasStarted = true;
-            }
+
+            HasStarted = true;
 
             WakeTime.Restart();
 
-            await discord.SendMessageAsync(DebugChannel, embedBuilder);
+            if (DebugChannel == null)
+            {
+                Console.WriteLine("!!! DebugChannel is null. Cannot send startup message.");
+            }
+            else
+            {
+                await discord.SendMessageAsync(DebugChannel, embedBuilder);
+            }
         }
     }
 }
