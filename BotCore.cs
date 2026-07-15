@@ -88,8 +88,9 @@ If you prefer to avoid OneDrive altogether, you can move your save location:
 
             Console.WriteLine(discord.Intents.ToString());
 
-            slashCommands.RegisterCommands<SlashGeneral>();
+            slashCommands.RegisterCommands<GameCommands>();
             slashCommands.RegisterCommands<AdminCommands>();
+            slashCommands.RegisterCommands<FunCommands>();
 
             await discord.ConnectAsync(new DiscordActivity(activity));
 

@@ -11,40 +11,18 @@ using FuzzySharp.SimilarityRatio.Scorer.StrategySensitive;
 using StudioForge.TotalMiner;
 using System;
 using System.Linq;
-using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ForgeBot.Commands
 {
-    [SlashCommandGroup("General", "General Commands")]
-    public class SlashGeneral : ApplicationCommandModule
+    [SlashCommandGroup("Game", "General TotalMiner related commands")]
+    internal class GameCommands : ApplicationCommandModule
     {
-        [SlashCommand("drift", "Can it drift tho?")]
-        public async Task ItCanDrift(InteractionContext ctx)
-        {
-            await ctx.CreateResponseAsync(":race_car: vrmmmvrmmmmmmm-skrrrrrrrrrrrrrrrrrrr-vrmmmmmmmmmmm");
-        }
-
-        [SlashCommand("cat", "Get a random cat picture")]
-        public async Task CatAsync(InteractionContext ctx)
-        {
-            using HttpClient client = new();
-            var response = await client.GetStringAsync("https://api.thecatapi.com/v1/images/search");
-            using JsonDocument data = JsonDocument.Parse(response);
-            var imageUrl = data.RootElement[0].GetProperty("url").GetString();
-
-            await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
-                .AddEmbed(new DiscordEmbedBuilder()
-                    .WithTitle("🐱 Random Cat")
-                    .WithImageUrl(imageUrl)
-                    .WithColor(DiscordColor.Orange)));
-        }
 #if DEBUG
         [SlashCommand("testtest", "TestCommand, Debug Only")]
-        public async Task TestyBoi(InteractionContext ctx)
+        internal async Task TestyBoi(InteractionContext ctx)
         {
-            await ctx.CreateResponseAsync(":race_car: vrmmmvrmmmmmmm-skrrrrrrrrrrrrrrrrrrr-vrmmmmmmmmmmm");
+            await ctx.CreateResponseAsync("YO THAT TEST COMMAND SUCCEEDED YO! THATS CASH MONEY YO!");
         }
 #endif
         //[SlashCommand("howto", "How to tutorials")]
@@ -61,7 +39,7 @@ namespace ForgeBot.Commands
         //}
 
         [SlashCommand("script", "Script documentation")]
-        public async Task ScriptDocumentation(InteractionContext ctx, [Option("Script", "Script Command Name")][RemainingText] string scriptname)
+        internal async Task ScriptDocumentation(InteractionContext ctx, [Option("Script", "Script Command Name")][RemainingText] string scriptname)
         {
             ScriptCommand.Script script = ScriptCommand.GetScript(scriptname.Replace(" ", ""));
             DiscordInteractionResponseBuilder messageBuilder = new();
@@ -81,7 +59,7 @@ namespace ForgeBot.Commands
         }
 
         [SlashCommand("item", "Gets info about any in-game item")]
-        public async Task WikiItem(InteractionContext ctx, [Description("ID of in game item")][Option("item", "Item or Block to review")][RemainingText] string itemid)
+        internal async Task WikiItem(InteractionContext ctx, [Description("ID of in game item")][Option("item", "Item or Block to review")][RemainingText] string itemid)
         {
             ItemDataXML _item = GameItem.GetItem(ItemIDConverter.ConvertBlockIDToItemID(itemid.Replace(" ", "")));
             DiscordInteractionResponseBuilder messageBuilder = new();

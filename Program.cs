@@ -184,9 +184,7 @@ namespace ForgeBot
             {
                 Directory.CreateDirectory(dataDir);
             }
-
-            using HttpClient client = new();
-            client.DefaultRequestHeaders.Add("User-Agent", "ForgeBot-DataFetcher");
+            var client = WebControl.GetClient();
 
             DownloadSingleFile(client, BotCore.ItemDataPath, Path.Combine(dataDir, "ItemData.xml"));
             DownloadSingleFile(client, BotCore.BlueprintDataPath, Path.Combine(dataDir, "BlueprintData.xml"));
