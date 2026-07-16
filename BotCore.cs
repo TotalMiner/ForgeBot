@@ -119,6 +119,7 @@ If you prefer to avoid OneDrive altogether, you can move your save location:
                 DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder()
                 .WithTitle($":x:  Shutting Down")
                 .WithDescription("Application Offline")
+                .AddField("System", $"{Environment.MachineName}", false)
                 .WithColor(DiscordColor.Red);
 
                 await discord.SendMessageAsync(DebugChannel, embedBuilder);
@@ -141,6 +142,7 @@ If you prefer to avoid OneDrive altogether, you can move your save location:
                 .WithDescription("Application Online")
                 .AddField("Startup Time", $"{WakeTime.ElapsedMilliseconds}ms", false)
                 .AddField("Ping", $"{sender.Ping}ms", false)
+                .AddField("System", $"{Environment.MachineName}", false)
                 .WithColor(DiscordColor.Green);
 
             if (IsVerbose)
