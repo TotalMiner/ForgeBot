@@ -1,5 +1,4 @@
-﻿using StudioForge.TotalMiner;
-using System;
+﻿using System;
 using System.IO;
 using System.Xml.Serialization;
 

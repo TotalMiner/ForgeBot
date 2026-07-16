@@ -1,6 +1,4 @@
-﻿using StudioForge.TotalMiner;
-
-namespace ForgeBot.Converters
+﻿namespace ForgeBot.Converters
 {
     public static class ItemIDConverter
     {

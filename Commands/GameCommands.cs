@@ -8,7 +8,6 @@ using FuzzySharp;
 using FuzzySharp.Extractor;
 using FuzzySharp.SimilarityRatio;
 using FuzzySharp.SimilarityRatio.Scorer.StrategySensitive;
-using StudioForge.TotalMiner;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
